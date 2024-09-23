@@ -4,6 +4,6 @@
 @tailwind utilities;
 
 
-* {
-    background-color: #0D0909;
+body {
+    @apply bg-white dark:bg-dark;
 }

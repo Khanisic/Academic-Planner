@@ -1,15 +1,14 @@
 <script>
+	import blogo from '../../assets/blogo.png';
+	import ThemeSwitch from '$lib/ThemeSwitch/ThemeSwitch.svelte';
+	let openDeptOptions = false;
+	function openDept() {
+		openDeptOptions = !openDeptOptions;
+	}
 	let degree = '';
 	let course = '';
-	let concentration = '';
+
 	let courses = ['Computer Science', 'Civil', 'Mechanical', 'Biology', 'Data Science'];
-	let concentrations = [
-		'Software Engineering',
-		'Data Analytics',
-		'Cybersecurity',
-		'Game Development',
-		'Web Developement'
-	];
 
 	const setDegree = (deg) => {
 		degree = deg;
@@ -17,25 +16,34 @@
 	const setCourse = (cou) => {
 		course = cou;
 	};
-	const setConcentration = (con) => {
-		concentration = con;
-	};
+
+	console.log(degree, course);
 </script>
 
-<div class="w-full items-center justify-center px-5 md:px-15 py-5 md:py-10 flex flex-col gap-1">
-	<h1 class="text-red font-calm text-xl md:text-4xl">Bradley University Academic Planner</h1>
-	<p class="text-white font-base">
-		Your one stop destination to <i class="text-sky font-bold">carve</i> out your academic path
+<!-- <div class="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+	<img class="fixed w-[250px] md:w-[450px]" src="blogo.png" alt="" />
+</div> -->
+<div
+	class="w-full items-center justify-center px-5 md:px-15 py-5 md:py-10 flex flex-col gap-1 relative"
+>
+	<ThemeSwitch />
+	<h1 class="dark:text-bradley text-dark font-calm text-2xl md:text-4xl bg-transparent">
+		Bradley University Academic Planner
+	</h1>
+	<p class="dark:text-white text-dark font-base bg-transparent">
+		Your one stop destination to <i class="text-blue font-bold">carve</i> out your academic path
 	</p>
 </div>
-<div class="flex gap-10 flex-wrap w-full px-5 md:px-10">
-	<div class="flex gap-5 items-start">
-		<div class="bg-navy flex justify-center items-center text-white font-calm w-10 h-10 rounded-xl">
+<div class="flex gap-10 flex-wrap w-full px-5 md:px-10 relative bg-transparent">
+	<div class="flex gap-5 items-start bg-transparent">
+		<div
+			class="dark:bg-blue bg-bradley flex justify-center items-center text-white font-calm w-10 h-10 rounded-xl"
+		>
 			1.
 		</div>
-		<div class="flex flex-col gap-2">
-			<p class="text-white font-calm text-xl">Select Degree Level</p>
-			<div class="flex gap-5 relative text-white font-base">
+		<div class="flex flex-col gap-2 bg-transparent">
+			<p class="dark:text-blue text-dark font-calm text-2xl bg-transparent">Select Degree Level</p>
+			<div class="flex gap-5 relative text-white font-base bg-transparent">
 				<button
 					on:click={() => {
 						setDegree('bachelor');
@@ -43,9 +51,9 @@
 					class="relative cursor-pointer px-2"
 				>
 					<div
-						class={`bg-sky -left-2 ${degree === 'bachelor' ? 'w-full translate-x-[7px]' : 'w-1'}  h-6 rounded-lg transition-all ease-in-out duration-300 absolute z-0`}
+						class={`dark:bg-blue bg-bradley -left-2 ${degree === 'bachelor' ? 'w-full translate-x-[7px]' : 'w-1'}  h-6 rounded-lg transition-all ease-in-out duration-300 absolute z-0`}
 					></div>
-					<p class="relative bg-transparent">Bachelor's</p>
+					<p class="relative bg-transparent dark:text-white text-lightbradley">Undergraduate</p>
 				</button>
 				<button
 					on:click={() => {
@@ -54,9 +62,9 @@
 					class="relative cursor-pointer px-2"
 				>
 					<div
-						class={`bg-sky -left-2 ${degree === 'master' ? 'w-full translate-x-[7px]' : 'w-1'}  h-6 rounded-lg transition-all ease-in-out duration-300 absolute z-0`}
+						class={`dark:bg-blue bg-bradley -left-2 ${degree === 'master' ? 'w-full translate-x-[7px]' : 'w-1'}  h-6 rounded-lg transition-all ease-in-out duration-300 absolute z-0`}
 					></div>
-					<p class="relative bg-transparent">Master's</p>
+					<p class="relative bg-transparent dark:text-white text-lightbradley">Graduate</p>
 				</button>
 			</div>
 		</div>
@@ -66,7 +74,7 @@
 			viewBox="0 0 24 24"
 			stroke-width="1.5"
 			stroke="currentColor"
-			class="size-8 stroke-sky"
+			class="size-8 dark:stroke-blue stroke-bradley bg-transparent"
 		>
 			<path
 				stroke-linecap="round"
@@ -76,36 +84,38 @@
 		</svg>
 	</div>
 
-	<div class="flex gap-2 items-start">
-		<div class="flex gap-5 items-start">
+	<div class="flex gap-2 items-start bg-transparent">
+		<div class="flex gap-5 items-start bg-transparent">
 			<div
-				class="bg-navy flex justify-center items-center text-white font-calm w-10 h-10 rounded-xl"
+				class="dark:bg-blue bg-bradley flex justify-center items-center text-white font-calm w-10 h-10 rounded-xl"
 			>
 				2.
 			</div>
-			<div class="flex flex-col gap-2">
-				<p class="text-white font-calm text-xl">Select Course</p>
-				<div class="flex flex-col gap-2 group">
+			<div class="flex flex-col gap-2 bg-transparent">
+				<p class="dark:text-blue text-dark font-calm text-2xl bg-transparent">Select Department</p>
+				<button on:click={openDept} class="flex flex-col gap-2 relative bg-transparent">
 					<div
-						class="bg-sky justify-center items-center flex text-white cursor-pointer w-[150px] font-base rounded-lg"
+						class="dark:bg-blue bg-bradley justify-center items-center flex text-white cursor-pointer w-[150px] font-base rounded-lg"
 					>
 						<p class="bg-transparent">{course ? course : 'Select'}</p>
 					</div>
-					<div
-						class="bg-navy hidden group-hover:flex text-white font-base flex-col items-center px-2 gap-2 py-2 rounded-lg"
-					>
-						{#each courses as courseSelect}
-							<button
-								on:click={() => {
-									setCourse(courseSelect);
-								}}
-								class="bg-transparent hover:bg-sky rounded-lg px-2 cursor-pointer hover:text-navy duration-300 ease-in-out transition-all"
-							>
-								{courseSelect}
-							</button>
-						{/each}
-					</div>
-				</div>
+					{#if openDeptOptions}
+						<div
+							class="dark:bg-skyblue bg-white shadow-lg top-8 absolute text-white font-base flex flex-col items-center px-2 gap-2 py-2 rounded-lg"
+						>
+							{#each courses as courseSelect}
+								<button
+									on:click={() => {
+										setCourse(courseSelect);
+									}}
+									class="bg-transparent hover:bg-lightbradley dark:hover:bg-blue rounded-lg px-2 cursor-pointer text-dark duration-100 ease-in-out transition-all"
+								>
+									{courseSelect}
+								</button>
+							{/each}
+						</div>
+					{/if}
+				</button>
 			</div>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -113,7 +123,7 @@
 				viewBox="0 0 24 24"
 				stroke-width="1.5"
 				stroke="currentColor"
-				class="size-8 stroke-sky"
+				class="size-8 dark:stroke-blue stroke-bradley bg-transparent"
 			>
 				<path
 					stroke-linecap="round"
@@ -124,51 +134,23 @@
 		</div>
 	</div>
 
-	<div class="flex gap-2 items-start">
-		<div class="flex gap-5 items-start">
-			<div
-				class="bg-navy flex justify-center items-center text-white font-calm w-10 h-10 rounded-xl"
-			>
-				3.
-			</div>
-			<div class="flex flex-col gap-2">
-				<p class="text-white font-calm text-xl">Select Concentration</p>
-				<div class="flex flex-col gap-2 group">
-					<div
-						class="bg-sky justify-center items-center flex text-white cursor-pointer w-[150px] font-base rounded-lg"
-					>
-						<p class="bg-transparent">{concentration ? concentration : 'Select'}</p>
-					</div>
-					<div
-						class="bg-navy hidden group-hover:flex text-white font-base flex-col items-center px-2 gap-2 py-2 rounded-lg"
-					>
-						{#each concentrations as concentrationSelect}
-							<button
-								on:click={() => {
-									setConcentration(concentrationSelect);
-								}}
-								class="bg-transparent hover:bg-sky rounded-lg px-2 cursor-pointer hover:text-navy duration-300 ease-in-out transition-all"
-							>
-								{concentrationSelect}
-							</button>
-						{/each}
-					</div>
-				</div>
-			</div>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke-width="1.5"
-				stroke="currentColor"
-				class="size-8 stroke-sky"
-			>
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"
-				/>
-			</svg>
+	<!-- 
+	Make a note of required concentration(s) 
+-->
+
+	{#if course && degree}
+		<div class="flex justify-center items-end bg-transparent">
+			<button
+				class="flex justify-center items-center px-7 rounded-lg hover:text-bradley dark:hover:text-sky hover:bg-dark hover:border-sky hover:border-[1px] transition-all ease-in-out duration-100 align-middle justify-self-center font-base text-lg bg-bradley text-white cursor-pointer"
+				><a class="bg-transparent" href="/department/csis">Submit</a>
+			</button>
 		</div>
-	</div>
+	{:else}
+		<div class="flex justify-center items-end bg-transparent">
+			<button
+				class="flex justify-center items-center px-7 rounded-lg align-middle justify-self-center font-base text-lg bg-grey cursor-not-allowed text-white"
+				>Submit</button
+			>
+		</div>
+	{/if}
 </div>
