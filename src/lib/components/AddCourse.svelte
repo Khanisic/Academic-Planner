@@ -184,7 +184,7 @@
 
 			
 
-			<button type="submit" class="bg-lightgreen hover:bg-green self-center w-fit rounded-lg px-3 py-1 mt-5 font-calm"
+			<button type="submit" class="bg-lightgreen mb-2 hover:bg-green self-center w-fit rounded-lg px-3 py-1 mt-5 font-calm"
 				>Add Course</button
 			>
 		</form>
