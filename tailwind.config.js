@@ -22,7 +22,8 @@ export default {
       },
       fontFamily: {
         'base': ["Roboto Condensed"],
-        'calm': ["Jockey One"]
+        'calm': ["Jockey One"],
+        'joan': ["Joan"]
       },
     },
   },
