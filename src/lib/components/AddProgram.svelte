@@ -171,7 +171,7 @@
 <Toaster />
 <div class="w-full h-full absolute top-0 left-0 flex justify-center items-center">
 	<div
-		class="bg-lightbradley relative flex gap-4 items-center flex-col p-4 rounded-lg max-h-[95%] bar overflow-y-auto border-2 border-dark"
+		class="bg-lightbradley max-w-[95%] relative flex gap-4  flex-col p-4 rounded-lg max-h-[95%] bar overflow-y-auto border-2 border-dark"
 	>
 		<button
 			on:click={() => {
@@ -394,7 +394,7 @@
 				</div>
 			</div>
 
-			<div class="w-full flex items-start justify-start flex-col">
+			<div class="w-full flex-wrap flex items-start justify-start flex-col">
 				<label for="" class="font-base"
 					>Required Course(s): {requiredHours > 0 ? `${requiredHours} Credit Hours` : ''}</label
 				>
@@ -405,7 +405,7 @@
 
 				<div class="flex gap-2">
 					<select
-						class="bg-lightpurple w-48 border-white text-dark text-sm font-base rounded-lg px-2 outline-none py-1"
+						class="bg-lightpurple w-36 md:w-48 border-white text-dark text-sm font-base rounded-lg px-2 outline-none py-1"
 						bind:value={selectedRequiredCourse1}
 					>
 						<option class="" disabled value="">Please select one!</option>
@@ -419,7 +419,7 @@
 					<p class="font-calm self-center">or</p>
 					<div class="flex gap-2">
 						<select
-							class="bg-lightpurple w-48 border-white text-dark text-sm font-base rounded-lg px-2 outline-none py-1"
+							class="bg-lightpurple w-36 md:w-48 border-white text-dark text-sm font-base rounded-lg px-2 outline-none py-1"
 							bind:value={selectedRequiredCourse2}
 						>
 							<option class="" disabled value="">Please select one!</option>

@@ -51,7 +51,7 @@
 
 <Toaster />
 <div class="w-full h-full absolute top-0 left-0 flex justify-center items-center">
-	<div class="bg-blue relative flex justify-center gap-4 items-center max-h-[95%] bar flex-col p-4 rounded-lg border-2 border-dark">
+	<div class="bg-blue relative flex gap-4 max-w-[95%] max-h-[95%] bar flex-col p-4 rounded-lg border-2 border-dark">
 		<button
 			on:click={() => {
 				openAddCourseModal = false;
