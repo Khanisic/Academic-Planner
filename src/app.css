@@ -9,7 +9,10 @@
 body {
     @apply bg-white dark:bg-dark;
 }
-
+.message{
+    font-family: 'Jockey One';
+    font-size: 20px;
+}
 .bar::-webkit-scrollbar{
     height: 3px;
     width: 4px;

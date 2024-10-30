@@ -30,6 +30,49 @@ export async function POST({ request }) {
     }
 }
 
+
+export async function PUT({ request }) {
+    await connectDB();
+
+    const {
+        id, 
+        course_title,
+        course_code,
+        course_dept,
+        course_description,
+        course_level,
+        course_credit_hours,
+    } = await request.json();
+
+    if (!id) {
+        return json({ message: 'Course ID is required for updating' }, { status: 400 });
+    }
+
+    try {
+        const updatedCourse = await Course.findByIdAndUpdate(
+            id,
+            {
+                course_title,
+                course_code,
+                course_dept,
+                course_description,
+                course_level,
+                course_credit_hours,
+            },
+            { new: true } 
+        );
+
+        if (!updatedCourse) {
+            return json({ message: 'Concentration not found' }, { status: 404 });
+        }
+
+        return json(updatedCourse, { status: 200 });
+    } catch (error) {
+        return json({ message: error.message }, { status: 500 });
+    }
+}
+
+
 export async function GET({ url }) {
     await connectDB();
 

@@ -2,14 +2,13 @@
 	import { departments } from '$lib/assets/departments.js';
 	import { onMount } from 'svelte';
 	import toast, { Toaster } from 'svelte-french-toast';
-	export let openAddConcentrationModal;
+	export let openAddConcentrationModal, edit, concentration;
 
-	let concentration_name,
-		concentration_about,
-		concentration_credit_hours,
-		concentration_dept,
-		concentration_level;
-
+	let concentration_name = '';
+	let concentration_about = '';
+	let concentration_credit_hours = '';
+	let concentration_dept = '';
+	let concentration_level = '';
 	let concentration_required_courses = [];
 	let concentration_required_courses_api = [];
 	let concentration_elective_courses = [];
@@ -28,36 +27,81 @@
 		} catch (error) {
 			console.error('Error fetching courses:', error);
 		}
+
+		if (edit && concentration) {
+			concentration_name = concentration.concentration_name;
+			concentration_about = concentration.concentration_about;
+			concentration_credit_hours = concentration.concentration_credit_hours;
+			concentration_dept = concentration.concentration_dept;
+			concentration_level = concentration.concentration_level;
+
+			// Map required courses
+			concentration_required_courses = concentration.concentration_required_courses.map(
+				(course) =>
+					`${course.course_dept.split(' ')[0]} ${course.course_code} ${course.course_title}`
+			);
+			concentration_required_courses_api = concentration.concentration_required_courses.map(
+				(course) => course._id
+			);
+			requiredHours = concentration.concentration_required_courses.reduce(
+				(sum, course) => sum + course.course_credit_hours,
+				0
+			);
+
+			// Map elective courses
+			concentration_elective_courses = concentration.concentration_elective_courses.map(
+				(course) =>
+					`${course.course_dept.split(' ')[0]} ${course.course_code} ${course.course_title}`
+			);
+			concentration_elective_courses_api = concentration.concentration_elective_courses.map(
+				(course) => course._id
+			);
+			electiveHours = concentration.concentration_elective_courses.reduce(
+				(sum, course) => sum + course.course_credit_hours,
+				0
+			);
+		}
 	});
 
+	// TODO: 1. Check if concentration hours  == required hours provided that electives are none. Else logic to validate correct number of required courses
+	// 2. Delete from selected in concentrations
 
-    // TODO: 1. Check if concentration hours  == required hours provided that electives are none. Else logic to validate correct number of required courses
-    // 2. Delete from selected in concentrations
-    
 	async function submitConcentration() {
-		const response = await fetch('/api/concentration', {
-			method: 'POST',
+		const method = edit ? 'PUT' : 'POST';
+		const url = '/api/concentration';
+
+		const requestBody = {
+			concentration_name,
+			concentration_about,
+			concentration_level,
+			concentration_required_courses: concentration_required_courses_api,
+			concentration_dept,
+			concentration_elective_courses: concentration_elective_courses_api,
+			concentration_credit_hours
+		};
+
+		if (edit) {
+			requestBody.id = concentration._id;
+		}
+
+		const response = await fetch(url, {
+			method: method,
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({
-				concentration_name,
-				concentration_about,
-				concentration_level,
-				concentration_required_courses: concentration_required_courses_api,
-				concentration_dept,
-				concentration_elective_courses: concentration_elective_courses_api,
-				concentration_credit_hours
-			})
+			body: JSON.stringify(requestBody)
 		});
-		console.log(response);
+
 		if (response.ok) {
-			toast.success('Concentration added successfully');
-			concentration_name = '';
-			concentration_about = '';
-			concentration_credit_hours = '';
+			toast.success(`Concentration ${edit ? 'updated' : 'added'} successfully`);
+			if (edit) {
+				setTimeout(() => {
+					openAddConcentrationModal = false;
+					location.reload();
+				}, 2000);
+			}
 		} else {
-			toast.error('Failed to add course');
+			toast.error(`Failed to ${edit ? 'update' : 'add'} concentration`);
 		}
 	}
 	let selectedRequiredCourse = '';
@@ -101,6 +145,30 @@
 			electiveHours += parseInt(course.course_credit_hours);
 		}
 		console.log(concentration_elective_courses_api);
+	};
+
+	const removeRequiredCourse = (index) => {
+		const removedCourse = concentration_required_courses.splice(index, 1)[0];
+		concentration_required_courses = [...concentration_required_courses];
+		concentration_required_courses_api.splice(index, 1);
+		const course = courses.find(
+			(c) => `${c.course_dept.split(' ')[0]} ${c.course_code}` === removedCourse
+		);
+		if (course) {
+			requiredHours -= parseInt(course.course_credit_hours);
+		}
+	};
+
+	const removeElectiveCourse = (index) => {
+		const removedCourse = concentration_elective_courses.splice(index, 1)[0];
+		concentration_elective_courses = [...concentration_elective_courses];
+		concentration_elective_courses_api.splice(index, 1);
+		const course = courses.find(
+			(c) => `${c.course_dept.split(' ')[0]} ${c.course_code}` === removedCourse
+		);
+		if (course) {
+			electiveHours -= parseInt(course.course_credit_hours);
+		}
 	};
 </script>
 
@@ -251,12 +319,32 @@
 				{#if concentration_required_courses.length > 0}
 					<div class="flex flex-col gap-1 mt-2">
 						{#each concentration_required_courses as rc, index}
-							<div class="font-calm flex gap-1 items-center">
-								<div class="bg-lightgreen rounded-lg w-5 h-5 flex justify-center items-center">
-									{index + 1}.
+							<button
+								type="button"
+								on:click={() => removeRequiredCourse(index)}
+								class="focus:outline-none group"
+							>
+								<div class="font-calm flex gap-1 items-center">
+									<div class="bg-lightgreen rounded-lg w-5 h-5 flex justify-center items-center">
+										{index + 1}.
+									</div>
+									<p>{rc}</p>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke-width="1.5"
+										stroke="currentColor"
+										class="size-4 group-hover:stroke-bradley stroke-green"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+										/>
+									</svg>
 								</div>
-								<p>{rc}</p>
-							</div>
+							</button>
 						{/each}
 					</div>
 				{/if}
@@ -289,20 +377,43 @@
 				</div>
 				{#if concentration_elective_courses.length > 0}
 					<div class="flex flex-col gap-1 mt-2">
-						{#each concentration_elective_courses as rc, index}
-							<div class="font-calm flex gap-1 items-center">
-								<div class="bg-lightgreen rounded-lg w-5 h-5 flex justify-center items-center">
-									{index + 1}.
+						{#each concentration_elective_courses as ec, index}
+							<button
+								type="button"
+								on:click={() => removeElectiveCourse(index)}
+								class="focus:outline-none group"
+							>
+								<div class="font-calm flex gap-1 items-center">
+									<div class="bg-lightgreen rounded-lg w-5 h-5 flex justify-center items-center">
+										{index + 1}.
+									</div>
+									<p>{ec}</p>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke-width="1.5"
+										stroke="currentColor"
+										class="size-4 group-hover:stroke-bradley stroke-green"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+										/>
+									</svg>
 								</div>
-								<p>{rc}</p>
-							</div>
+							</button>
 						{/each}
 					</div>
 				{/if}
 			</div>
 
-			<button type="submit" class="bg-skyblue self-center w-fit hover:bg-blue rounded-lg py-1 px-3 mt-5 font-calm"
-				>Add Concentration</button
+			<button
+				type="submit"
+				class="bg-skyblue self-center w-fit hover:bg-blue rounded-lg py-1 px-3 mt-5 font-calm"
+				>{#if edit}<span>Edit</span>
+				{:else}Add{/if} Program Concentration</button
 			>
 		</form>
 	</div>

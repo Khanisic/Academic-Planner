@@ -1,6 +1,7 @@
 <script>
 	import blogo from '../../assets/blogo.png';
 	import ThemeSwitch from '$lib/ThemeSwitch/ThemeSwitch.svelte';
+	import { departments } from '$lib/assets/departments.js';
 	let openDeptOptions = false;
 	function openDept() {
 		openDeptOptions = !openDeptOptions;
@@ -30,9 +31,9 @@
 	<h1 class="dark:text-bradley text-dark font-calm text-2xl md:text-4xl bg-transparent">
 		Bradley University Academic Planner
 	</h1>
-	<p class="dark:text-white text-dark font-base bg-transparent">
+	<!-- <p class="dark:text-white text-dark font-base bg-transparent">
 		Your one stop destination to <i class="text-blue font-bold">carve</i> out your academic path
-	</p>
+	</p> -->
 </div>
 <div class="flex gap-10 flex-wrap w-full px-5 md:px-10 relative bg-transparent">
 	<div class="flex gap-5 items-start bg-transparent">
@@ -103,14 +104,15 @@
 						<div
 							class="dark:bg-skyblue bg-white shadow-lg top-8 absolute text-white font-base flex flex-col items-center px-2 gap-2 py-2 rounded-lg"
 						>
-							{#each courses as courseSelect}
+							{#each departments as department}
 								<button
 									on:click={() => {
-										setCourse(courseSelect);
+										setCourse(`${department.code} ${department.name}`);
 									}}
 									class="bg-transparent hover:bg-lightbradley dark:hover:bg-blue rounded-lg px-2 cursor-pointer text-dark duration-100 ease-in-out transition-all"
 								>
-									{courseSelect}
+									{department.code}
+									{department.name}
 								</button>
 							{/each}
 						</div>

@@ -35,7 +35,6 @@ export async function POST({ request }) {
 export async function GET({ url }) {
     await connectDB();
 
-    const department = url.searchParams.get('department');
 
     try {
         const concentrations = await Concentration.find();
@@ -45,3 +44,48 @@ export async function GET({ url }) {
         return json({ message: error.message }, { status: 500 });
     }
 }
+
+export async function PUT({ request }) {
+    await connectDB();
+
+    const {
+        id, 
+        concentration_name,
+        concentration_about,
+        concentration_level,
+        concentration_required_courses,
+        concentration_dept,
+        concentration_elective_courses,
+        concentration_credit_hours
+    } = await request.json();
+
+    if (!id) {
+        return json({ message: 'Program ID is required for updating' }, { status: 400 });
+    }
+
+    try {
+        const updatedConcentration = await Concentration.findByIdAndUpdate(
+            id,
+            {
+                concentration_name,
+                concentration_about,
+                concentration_level,
+                concentration_required_courses,
+                concentration_dept,
+                concentration_elective_courses,
+                concentration_credit_hours
+            },
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedConcentration) {
+            return json({ message: 'Concentration not found' }, { status: 404 });
+        }
+
+        return json(updatedConcentration, { status: 200 });
+    } catch (error) {
+        return json({ message: error.message }, { status: 500 });
+    }
+}
+
+

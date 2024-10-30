@@ -1,7 +1,8 @@
 <script>
 	import { departments } from '$lib/assets/departments.js';
+	import { onMount } from 'svelte';
 	import toast, { Toaster } from 'svelte-french-toast';
-	export let openAddCourseModal;
+	export let openAddCourseModal, edit, course;
 
 	let course_title,
 		course_code,
@@ -11,6 +12,16 @@
 		course_credit_hours,
 		course_prereq;
 
+	onMount(async () => {
+		if (edit && course) {
+			course_title = course.course_title;
+			course_code = course.course_code;
+			course_dept = course.course_dept;
+			course_description = course.course_description;
+			course_level = course.course_level;
+			course_credit_hours = course.course_credit_hours;
+		}
+	});
 	async function submitCourse() {
 		console.log(
 			course_title,
@@ -20,23 +31,36 @@
 			course_level,
 			course_credit_hours
 		);
-		const response = await fetch('/api/course', {
-			method: 'POST',
+		let method = edit ? 'PUT' : 'POST';
+		let url = '/api/course';
+		const requestBody = {
+			course_title,
+			course_code,
+			course_dept,
+			course_description,
+			course_level,
+			course_credit_hours
+		};
+		if (edit) {
+			requestBody.id = course._id;
+		}
+
+		const response = await fetch(url, {
+			method: method,
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({
-				course_title,
-				course_code,
-				course_dept,
-				course_description,
-				course_level,
-				course_credit_hours
-			})
+			body: JSON.stringify(requestBody)
 		});
 		console.log(response);
 		if (response.ok) {
-			toast.success('Course added successfully');
+			toast.success(`Course ${edit ? 'updated' : 'added'} successfully`);
+			if (edit) {
+				setTimeout(() => {
+					openAddCourseModal = false;
+					location.reload();
+				}, 2000);
+			}
 			course_title = '';
 			course_code = '';
 			course_dept = '';
@@ -51,7 +75,9 @@
 
 <Toaster />
 <div class="w-full h-full absolute top-0 left-0 flex justify-center items-center">
-	<div class="bg-blue relative flex gap-4 max-w-[95%] max-h-[95%] bar flex-col p-4 rounded-lg border-2 border-dark">
+	<div
+		class="bg-blue relative flex gap-4 max-w-[95%] max-h-[95%] bar flex-col p-4 rounded-lg border-2 border-dark"
+	>
 		<button
 			on:click={() => {
 				openAddCourseModal = false;
@@ -182,9 +208,9 @@
 				</div>
 			</div>
 
-			
-
-			<button type="submit" class="bg-lightgreen mb-2 hover:bg-green self-center w-fit rounded-lg px-3 py-1 mt-5 font-calm"
+			<button
+				type="submit"
+				class="bg-lightgreen mb-2 hover:bg-green self-center w-fit rounded-lg px-3 py-1 mt-5 font-calm"
 				>Add Course</button
 			>
 		</form>
