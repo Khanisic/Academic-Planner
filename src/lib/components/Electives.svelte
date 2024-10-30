@@ -6,7 +6,7 @@
 		selectedElective = course;
 		step = -6;
 		// allCourses = [...allCourses, course];
-		console.log(allCourses);
+
 	};
 </script>
 

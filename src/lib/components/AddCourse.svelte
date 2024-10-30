@@ -23,14 +23,7 @@
 		}
 	});
 	async function submitCourse() {
-		console.log(
-			course_title,
-			course_code,
-			course_dept,
-			course_description,
-			course_level,
-			course_credit_hours
-		);
+
 		let method = edit ? 'PUT' : 'POST';
 		let url = '/api/course';
 		const requestBody = {
@@ -52,7 +45,7 @@
 			},
 			body: JSON.stringify(requestBody)
 		});
-		console.log(response);
+
 		if (response.ok) {
 			toast.success(`Course ${edit ? 'updated' : 'added'} successfully`);
 			if (edit) {

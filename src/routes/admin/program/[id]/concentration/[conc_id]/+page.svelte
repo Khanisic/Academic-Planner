@@ -5,7 +5,7 @@
 	let edit = true;
 	const { concentration } = data;
 	let openAddConcentrationModal = false;
-	console.log(concentration);
+
 </script>
 
 <main>

@@ -115,7 +115,7 @@
 				c.course_dept.split(' ')[0] == selectedRequiredCourse.split(' ')[0] &&
 				c.course_code == selectedRequiredCourse.split(' ')[1]
 		)[0];
-		console.log(course);
+		
 		if (
 			selectedRequiredCourse &&
 			!concentration_required_courses.includes(selectedRequiredCourse) &&
@@ -125,7 +125,7 @@
 			concentration_required_courses_api = [...concentration_required_courses_api, course._id];
 			requiredHours += parseInt(course.course_credit_hours);
 		}
-		console.log(concentration_required_courses_api);
+	
 	};
 
 	const addElectiveCourse = () => {
@@ -144,7 +144,7 @@
 
 			electiveHours += parseInt(course.course_credit_hours);
 		}
-		console.log(concentration_elective_courses_api);
+		
 	};
 
 	const removeRequiredCourse = (index) => {

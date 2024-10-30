@@ -19,7 +19,7 @@
 	});
 
 	async function submitFaculty() {
-		console.log(name, faculty_dept, link, active);
+
 		let method = edit ? 'PUT' : 'POST';
 		let url = '/api/faculty';
 		const requestBody = { name, faculty_dept, link, active };
@@ -35,7 +35,7 @@
 			},
 			body: JSON.stringify(requestBody)
 		});
-		console.log(response);
+		
 		if (response.ok) {
 			toast.success(`Faculty ${edit ? 'updated' : 'added'} successfully`);
 			if (edit) {

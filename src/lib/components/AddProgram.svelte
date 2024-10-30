@@ -38,7 +38,7 @@
 			const response = await fetch('/api/concentration');
 			if (response.ok) {
 				concentrations = await response.json();
-				console.log(concentrations);
+
 			} else {
 				console.error('Failed to fetch concentrations');
 			}
@@ -132,12 +132,12 @@
 		let concentration = concentrations.filter(
 			(conc) => conc.concentration_name == selectedConcentration
 		)[0];
-		console.log(concentration);
+		
 		if (selectedConcentration && !selectedConcentrations.includes(selectedConcentration)) {
 			selectedConcentrations = [...selectedConcentrations, selectedConcentration];
 			selectedConcentrations_api = [...selectedConcentrations_api, concentration._id];
 		}
-		console.log(selectedConcentrations_api);
+
 	};
 
 	const addRequiredCourse = () => {
@@ -151,7 +151,7 @@
 				c.course_dept.split(' ')[0] == selectedRequiredCourse2.split(' ')[0] &&
 				c.course_code == selectedRequiredCourse2.split(' ')[1]
 		)[0];
-		console.log(course1);
+
 		if (
 			selectedRequiredCourse1 &&
 			!all_courses.includes(selectedRequiredCourse1) &&
@@ -187,9 +187,7 @@
 			selectedRequiredCourse1 = '';
 			selectedRequiredCourse2 = '';
 		}
-		console.log(all_courses);
-		console.log(required_courses);
-		console.log(required_courses_api);
+
 	};
 
 	async function submitProgram() {

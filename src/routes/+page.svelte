@@ -18,7 +18,6 @@
 		course = cou;
 	};
 
-	console.log(degree, course);
 </script>
 
 <!-- <div class="absolute top-0 left-0 w-full h-full flex justify-center items-center">

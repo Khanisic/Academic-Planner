@@ -19,7 +19,7 @@
 			const response = await fetch('/api/course'); // Adjust the API endpoint as needed
 			if (response.ok) {
 				courses = await response.json();
-				console.log(courses);
+			
 			} else {
 				console.error('Failed to fetch courses');
 			}
@@ -31,7 +31,7 @@
 			const response = await fetch('/api/faculty'); // Adjust the API endpoint as needed
 			if (response.ok) {
 				faculty = await response.json();
-				console.log(faculty);
+		
 			} else {
 				console.error('Failed to fetch courses');
 			}
@@ -64,10 +64,10 @@
 				c.course_dept.split(' ')[0] == selectedCourse.split(' ')[0] &&
 				c.course_code == selectedCourse.split(' ')[1]
 		)[0];
-		console.log(course);
+
 
 		let fac = faculty.filter((f) => f.name == selectedFaculty);
-		console.log(fac);
+
 
 		if (course && fac) {
 			selectedOfferings = [
@@ -95,9 +95,6 @@
 		selectedOfferings = [...selectedOfferings];
 		const removedOffering_api = selectedOfferings_api.splice(index, 1)[0];
 		selectedOfferings_api = [...selectedOfferings_api];
-
-		console.log(selectedOfferings);
-		console.log(selectedOfferings_api);
 	};
 
 	async function submitOffering() {

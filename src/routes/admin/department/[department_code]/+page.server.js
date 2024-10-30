@@ -8,9 +8,9 @@ import connectDB from '../../../../db/db';
 export async function load({ params }) {
     const { department_code } = params;
     await connectDB();
-    console.log(department_code, "code")
+
     const department = departments.filter((dept) => dept.code == department_code)
-    console.log(department, "dept")
+   
     // eslint-disable-next-line no-useless-catch
     try {
         let professors = await Faculty.find({

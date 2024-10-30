@@ -1,7 +1,6 @@
 <script>
 	import { csis } from '$lib/assets/mscs.js';
 	export let selectedCoreCourses, addCoreCourse, step;
-    console.log(selectedCoreCourses)
 </script>
 
 <div class="flex gap-5 items-start bg-transparent">

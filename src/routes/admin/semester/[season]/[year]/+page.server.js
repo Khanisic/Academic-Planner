@@ -5,7 +5,7 @@ import Semester from '../../../../../db/models/semester.model';
 
 export async function load({ params }) {
     const { season, year } = params;
-    console.log(season, year)
+
     let semester;
 
     try {

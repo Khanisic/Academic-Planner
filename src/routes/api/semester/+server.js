@@ -14,12 +14,6 @@ export async function POST({ request }) {
         season,
         selectedOfferings_api } = await request.json();
 
-    console.log(year,
-        semester_dept,
-        season,
-        selectedOfferings_api);
-
-
     try {
         
         const courseOfferingIds = await Promise.all(selectedOfferings_api.map(async (offering) => {

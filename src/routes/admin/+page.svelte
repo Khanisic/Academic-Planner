@@ -14,7 +14,7 @@
 		openSemesterModal = false;
 
 	export let data;
-	console.log(data)
+
 	const { programs, semesters } = data;
 	
 </script>
@@ -89,6 +89,7 @@
 		<a
 			href={`admin/program/${program._id}`}
 			class="flex gap-2 cursor-pointer mt-2 items-center group w-fit"
+			data-sveltekit-preload-data="off"
 		>
 			<p
 				class="dark:bg-blue bg-purple flex justify-center items-center text-white font-calm w-8 h-8 rounded-xl"
@@ -113,6 +114,7 @@
 		<a
 			href={`admin/semester/${semester.season}/${semester.year}`}
 			class="flex gap-2 cursor-pointer mt-2 items-center group w-fit"
+			data-sveltekit-preload-data="off"
 		>
 			<p
 				class=" bg-yellow flex justify-center items-center text-white font-calm w-8 h-8 rounded-xl"
@@ -131,8 +133,9 @@
 	<h1 class="mt-10 font-calm text-3xl text-blue">Departments:</h1>
 	{#each departments as department, index}
 		<a
-			href={`/admin/department/${department.code}`}
+			href={`admin/department/${department.code}`}
 			class="flex gap-2 cursor-pointer mt-2 items-center group w-fit"
+			data-sveltekit-preload-data="off"
 		>
 			<p class=" bg-blue flex justify-center items-center text-white font-calm w-8 h-8 rounded-xl">
 				{index + 1}.

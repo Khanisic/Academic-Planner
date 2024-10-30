@@ -14,9 +14,8 @@
 	// 		console.error('Error fetching courses:', error);
 	// 	}
 	// });
-	console.log(professors);
+
 	const openFaculty = (prof) => {
-		console.log(prof)
 		openFacultyModal = true;
 		faculty = prof;
 	};

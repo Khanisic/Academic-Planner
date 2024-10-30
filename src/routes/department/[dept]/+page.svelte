@@ -142,7 +142,7 @@
 		} else {
 			toast.error('Maximum electives reached, click on a selected elective to remove it!');
 		}
-		console.log(totalHours);
+
 
 		if (totalHours == 9) {
 			step = -5;
@@ -195,9 +195,6 @@
 	const moveAhead = () => {
 		step = Math.abs(step);
 		if (step == 5) {
-			console.log('selected courses: ', selectedCoreCourses);
-			console.log('concentration 1 courses: ', selectedConc1Courses);
-			console.log('concentration 2 courses: ', selectedConc2Courses);
 			allCourses = Object.keys({
 				...selectedCoreCourses,
 				...selectedConc1Courses,

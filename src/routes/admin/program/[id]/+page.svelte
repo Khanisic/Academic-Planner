@@ -4,7 +4,7 @@
 
 	export let data;
 	const { program } = data;
-	console.log(program);
+
 	let openAddProgramModal = false;
 	let edit = true;
 </script>
