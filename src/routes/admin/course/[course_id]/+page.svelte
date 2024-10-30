@@ -4,7 +4,6 @@
 	export let data;
 	let edit = true;
 	let openAddCourseModal = false;
-	let openAddFacultyOfferingModal = false;
 
 	const { course } = data;
 	console.log(course);
@@ -49,12 +48,5 @@
 	</div>
 	<p class="font-base text-lg leading-5 mb-2">{course.course_description}</p>
 
-	<button
-		class="bg-skyblue px-4 py-1 rounded-lg font-calm mt-3 hover:bg-blue"
-		on:click={() => {
-			openAddFacultyOfferingModal = true;
-		}}
-	>
-		+ Add Faculty Offering
-	</button>
+
 </div>
