@@ -2,9 +2,10 @@
 import { json } from '@sveltejs/kit';
 import Program from '../../db/models/programs.model'
 import Semester from '../../db/models/semester.model'
-
+import connectDB from '../../db/db';
 export async function load({ fetch }) {
 
+    await connectDB();
     let programs;
     let semesters;
     try {
