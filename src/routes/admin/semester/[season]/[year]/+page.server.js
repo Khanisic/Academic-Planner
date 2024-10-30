@@ -1,6 +1,9 @@
 // src/routes/admin/program/[id]/+page.server.js
 import { json } from '@sveltejs/kit';
 import Semester from '../../../../../db/models/semester.model';
+import Course from '../../../../../db/models/course.model';
+import Faculty from '../../../../../db/models/faculty.model';
+
 
 
 export async function load({ params }) {
@@ -15,8 +18,8 @@ export async function load({ params }) {
             path: 'course_offerings',
             model: 'CourseOffered',
             populate: [
-                { path: 'course', model: 'Course' },
-                { path: 'faculty', model: 'Faculty' }
+                { path: 'course', model: Course },
+                { path: 'faculty', model: Faculty }
             ]
         })
 

@@ -1,5 +1,6 @@
 import Program from '../../../../db/models/programs.model';
-
+import Course from '../../../../db/models/course.model';
+import Concentration from '../../../../db/models/course.model';
 import connectDB from '../../../../db/db';
 import { json } from '@sveltejs/kit';
 
@@ -13,15 +14,15 @@ export async function load({ params }) {
         let program = await Program.findById(id)
             .populate({
                 path: 'program_required_courses.required_course',
-                model: 'Course'
+                model: Course
             })
             .populate({
                 path: 'program_required_courses.altername_course',
-                model: 'Course'
+                model: Course
             })
             .populate({
                 path: 'program_concentrations',
-                model: 'Concentration'
+                model: Concentration
             })
             .lean();
 

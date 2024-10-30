@@ -1,6 +1,7 @@
 import Concentration from '../../../../../../db/models/concentrations.model'
 import connectDB from '../../../../../../db/db'
 import { json } from '@sveltejs/kit';
+import Course from '../../../../../../db/models/course.model';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }) {
@@ -12,11 +13,11 @@ export async function load({ params }) {
         let concentration = await Concentration.findById(conc_id)
             .populate({
                 path: 'concentration_required_courses',
-                model: 'Course'
+                model: Course
             })
             .populate({
                 path: 'concentration_elective_courses',
-                model: 'Course'
+                model: Course
             })
 
         if (!concentration) {
