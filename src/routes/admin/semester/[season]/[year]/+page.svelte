@@ -4,7 +4,7 @@
 	export let data;
 	const { semester } = data;
 	let openSemesterModal;
-
+	console.log(semester);
 	let edit = true;
 </script>
 

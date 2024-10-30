@@ -3,10 +3,12 @@ import { json } from '@sveltejs/kit';
 import Semester from '../../../../../db/models/semester.model';
 import Course from '../../../../../db/models/course.model';
 import Faculty from '../../../../../db/models/faculty.model';
+import CourseOffered from '../../../../../db/models/offeredCourse.model';
 
-
+import connectDB from '../../../../../db/db';
 
 export async function load({ params }) {
+    await connectDB();
     const { season, year } = params;
 
     let semester;
@@ -16,7 +18,7 @@ export async function load({ params }) {
             season, year
         }).populate({
             path: 'course_offerings',
-            model: 'CourseOffered',
+            model: CourseOffered,
             populate: [
                 { path: 'course', model: Course },
                 { path: 'faculty', model: Faculty }
@@ -24,8 +26,9 @@ export async function load({ params }) {
         })
 
 
-    } catch (error) {
 
+    } catch (error) {
+ 
         return {
             error: error.message
         };
