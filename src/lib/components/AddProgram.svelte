@@ -38,7 +38,6 @@
 			const response = await fetch('/api/concentration');
 			if (response.ok) {
 				concentrations = await response.json();
-
 			} else {
 				console.error('Failed to fetch concentrations');
 			}
@@ -129,15 +128,16 @@
 	let all_courses = [];
 
 	const addConcentration = () => {
+		console.log("All concentrations",concentrations)
 		let concentration = concentrations.filter(
 			(conc) => conc.concentration_name == selectedConcentration
 		)[0];
-		
+
 		if (selectedConcentration && !selectedConcentrations.includes(selectedConcentration)) {
 			selectedConcentrations = [...selectedConcentrations, selectedConcentration];
 			selectedConcentrations_api = [...selectedConcentrations_api, concentration._id];
 		}
-
+		console.log("Add button",selectedConcentrations_api);
 	};
 
 	const addRequiredCourse = () => {
@@ -187,7 +187,6 @@
 			selectedRequiredCourse1 = '';
 			selectedRequiredCourse2 = '';
 		}
-
 	};
 
 	async function submitProgram() {
@@ -209,7 +208,7 @@
 			program_concentration_requirements,
 			program_level
 		};
-
+		console.log('Client', selectedConcentrations_api);
 		if (edit) {
 			requestBody.id = program._id;
 		}
@@ -260,7 +259,7 @@
 </script>
 
 <Toaster />
-<div class="w-full h-full absolute top-0 left-0 flex justify-center items-center">
+<div class="w-full h-full absolute top-0 left-0 flex justify-center items-center z-50 bg-[#000000de]">
 	<div
 		class="bg-bradley max-w-[95%] relative flex gap-4 flex-col p-4 rounded-lg max-h-[95%] bar overflow-y-auto border-2 border-dark"
 	>

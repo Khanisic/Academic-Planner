@@ -6,7 +6,7 @@
 	let openAddCourseModal = false;
 
 	const { course } = data;
-	console.log(course);
+
 </script>
 
 <main>

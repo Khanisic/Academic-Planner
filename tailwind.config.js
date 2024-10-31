@@ -19,6 +19,13 @@ export default {
         lightbradley: '#F5D3D9',
         white: '#FFFFFF',
         lightgrey: '#F8F8F8',
+        darkBg: '#27282B',
+        darkInner: '#111111',
+        darkBorder :'#25262D',
+        lightBorder : '#F3F3F4',
+        leftBar : '#F4F4F4',
+        darkLeftBar : '#1E1F22',
+        text : '#616970'
       },
       fontFamily: {
         'base': ["Roboto Condensed"],

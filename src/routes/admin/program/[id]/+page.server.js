@@ -1,6 +1,6 @@
 import Program from '../../../../db/models/programs.model';
 import Course from '../../../../db/models/course.model';
-import Concentration from '../../../../db/models/course.model';
+import Concentration from '../../../../db/models/concentrations.model';
 import connectDB from '../../../../db/db';
 import { json } from '@sveltejs/kit';
 
