@@ -1,6 +1,7 @@
 <script>
 	import { csis } from '$lib/assets/mscs.js';
-	export let selectedCoreCourses, addCoreCourse, step;
+	export let selectedCoreCourses, addCoreCourse, program;
+
 </script>
 
 <div class="flex gap-5 items-start bg-transparent">
@@ -16,32 +17,38 @@
 <p class="font-base dark:text-purple text-dark">Select either course from each row</p>
 <div class="flex gap-4">
 	<div class="flex flex-col gap-3">
-		{#each csis.requirements.required_courses as courses, index}
-			<button
-				on:click={() => {
-					addCoreCourse(
-						`${courses.course_code} : ${courses.course_name}`,
-						`${courses.alternative.course_code} : ${courses.alternative.course_name}`
-					);
-				}}
-				class={` ${selectedCoreCourses[`${courses.course_code} : ${courses.course_name}`] == true ? 'bg-purple' : 'bg-lightpurple'}  border-2 border-lightpurple max-w-[350px] shadow-md font-base hover:bg-purple rounded-lg px-3 cursor-pointer `}
-				>{courses.course_code} {courses.course_name}</button
-			>
-		{/each}
-	</div>
+		{#each program.program_required_courses as courses, index}
+			<div class="flex gap-2">
+				<button
+					on:click={() => {
+						addCoreCourse(
+							`${courses.required_course.course_code} : ${courses.required_course.course_title}`,
+							courses.altername_course
+								? `${courses.altername_course.course_code} : ${courses.altername_course.course_title}`
+								: null
+						);
+					}}
+					class={`${selectedCoreCourses[`${courses.required_course.course_code} : ${courses.required_course.course_title}`] ? 'bg-purple' : 'bg-lightpurple'} border-2 border-lightpurple max-w-[350px] shadow-md font-base hover:bg-purple rounded-lg px-3 cursor-pointer`}
+				>
+					CS {courses.required_course.course_code}
+					{courses.required_course.course_title}
+				</button>
 
-	<div class="flex flex-col gap-3">
-		{#each csis.requirements.required_courses as courses, index}
-			<button
-				on:click={() => {
-					addCoreCourse(
-						`${courses.alternative.course_code} : ${courses.alternative.course_name}`,
-						`${courses.course_code} : ${courses.course_name}`
-					);
-				}}
-				class={`${selectedCoreCourses[`${courses.alternative.course_code} : ${courses.alternative.course_name}`] == true ? 'bg-purple' : 'bg-lightpurple'}  border-2 border-lightpurple max-w-[350px] shadow-md font-base hover:bg-purple rounded-lg px-3 cursor-pointer `}
-				>{courses.alternative.course_code} {courses.alternative.course_name}</button
-			>
+				{#if courses.altername_course}
+					<button
+						on:click={() => {
+							addCoreCourse(
+								`${courses.altername_course.course_code} : ${courses.altername_course.course_title}`,
+								`${courses.required_course.course_code} : ${courses.required_course.course_title}`
+							);
+						}}
+						class={`${selectedCoreCourses[`${courses.altername_course.course_code} : ${courses.altername_course.course_title}`] ? 'bg-purple' : 'bg-lightpurple'} border-2 border-lightpurple max-w-[350px] shadow-md font-base hover:bg-purple rounded-lg px-3 cursor-pointer`}
+					>
+						CS {courses.altername_course.course_code}
+						{courses.altername_course.course_title}
+					</button>
+				{/if}
+			</div>
 		{/each}
 	</div>
 </div>

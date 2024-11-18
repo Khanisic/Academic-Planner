@@ -67,7 +67,7 @@
 
 <Toaster />
 <div
-	class="w-full h-full absolute top-0 left-0 flex justify-center items-center z-50 bg-[#000000de]"
+	class="w-full h-full absolute top-0 left-0 flex justify-center items-center z-50 bg-[#000000de] rounded-xl"
 >
 	<div
 		class="bg-blue relative flex gap-4 max-w-[95%] max-h-[95%] bar flex-col p-4 rounded-lg border-2 border-dark"

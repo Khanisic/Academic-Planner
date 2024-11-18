@@ -43,16 +43,16 @@
 {#if openSemesterModal}
 	<AddSemester bind:openSemesterModal />
 {/if}
-<div class="flex h-full">
+<div class="flex h-full relative top-0">
 	<div
-		class="bg-leftBar dark:bg-black rounded-l-xl border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px] h-full w-1/6"
+		class="bg-leftBar top-0 sticky dark:bg-black rounded-l-xl border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px] h-full w-1/6"
 	>
 		<LeftBar />
 	</div>
 
 	<div class="w-5/6 flex flex-col h-full relative">
 		<UpperBar bind:title />
-		<div class="flex h-full">
+		<div class="flex h-full overflow-hidden">
 			<div
 				class="w-[77%] h-full border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px]"
 			>

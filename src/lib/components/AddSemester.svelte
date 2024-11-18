@@ -164,7 +164,7 @@
 </script>
 
 <Toaster />
-<div class="w-full h-full absolute top-0 left-0 flex justify-center items-center z-50 bg-[#000000de]">
+<div class="w-full h-full absolute top-0 left-0 flex justify-center items-center z-50 bg-[#000000de] rounded-xl">
 	<div
 		class="bg-lightgrey relative flex max-w-[95%] gap-4 items-center flex-col p-4 rounded-lg max-h-[95%] bar overflow-y-auto border-2 border-dark"
 	>

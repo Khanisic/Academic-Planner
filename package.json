@@ -29,6 +29,7 @@
 	"type": "module",
 	"dependencies": {
 		"mongoose": "^8.7.1",
+		"svelte-dnd-action": "^0.9.52",
 		"svelte-french-toast": "^1.2.0"
 	}
 }

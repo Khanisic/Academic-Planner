@@ -4,14 +4,14 @@
 	import { departments } from '$lib/assets/departments.js';
 	import LeftBar from '../lib/components/LeftBar.svelte';
 	import UpperBar from '../lib/components/UpperBar.svelte';
+	import toast, { Toaster } from 'svelte-french-toast';
+	import { goto } from '$app/navigation';
 	let openDeptOptions = false;
 	function openDept() {
 		openDeptOptions = !openDeptOptions;
 	}
 	let degree = '';
 	let course = '';
-
-	let courses = ['Computer Science', 'Civil', 'Mechanical', 'Biology', 'Data Science'];
 
 	const setDegree = (deg) => {
 		degree = deg;
@@ -22,20 +22,44 @@
 
 	let title = 'Bradley University Academic Planner';
 	let main = true;
+
+	const submitSelection = async () => {
+		let method = 'GET';
+		let url = `/api/path?course=${encodeURIComponent(course)}&degree=${encodeURIComponent(degree)}`;
+
+		const requestBody = {
+			course,
+			degree
+		};
+		const response = await fetch(url, {
+			method: method,
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		if (response.ok) {
+			toast.success(`Routing to Master's in Cpmputer Science `);
+			const data = await response.json();
+			goto(`/path/${data.programs[0]._id}`);
+		} else {
+			toast.error('Failed to add course');
+		}
+	};
 </script>
 
-<div class="flex h-full">
+<Toaster />
+
+<div class="flex h-full relative top-0">
 	<div
-		class="bg-leftBar dark:bg-black rounded-l-xl border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px] h-full w-1/6"
+		class="bg-leftBar top-0 sticky dark:bg-black rounded-l-xl border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px] h-full w-1/6"
 	>
 		<LeftBar />
 	</div>
-	<div class="w-5/6 flex flex-col h-full relative">
-		<UpperBar bind:title bind:main />
-
-		<div class="flex h-full">
+	<div class="w-5/6 flex flex-col h-full">
+		<UpperBar bind:title />
+		<div class="flex h-full overflow-hidden">
 			<div
-				class="w-[77%] py-10 h-full border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px]"
+				class="w-[77%] overflow-auto bar py-10 h-full border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px]"
 			>
 				<div class="flex gap-10 flex-wrap w-full px-5 md:px-10">
 					<div class="flex gap-5 items-start bg-transparent">
@@ -147,8 +171,11 @@
 					{#if course && degree}
 						<div class="flex justify-center items-end bg-transparent">
 							<button
+								on:click={() => {
+									submitSelection();
+								}}
 								class="flex justify-center items-center px-7 rounded-lg hover:text-bradley dark:hover:text-sky hover:bg-dark hover:border-sky hover:border-[1px] transition-all ease-in-out duration-100 align-middle justify-self-center font-base text-lg bg-bradley text-white cursor-pointer"
-								><a class="bg-transparent" href="/department/csis">Submit</a>
+								><p class="bg-transparent">Submit</p>
 							</button>
 						</div>
 					{:else}
@@ -163,7 +190,7 @@
 			</div>
 
 			<div
-				class="w-[23%] flex flex-col gap-3 px-2 pt-3 items-center relative overflow-y-auto bar"
+				class="w-[23%] top-0 sticky flex flex-col gap-3 px-2 pt-3 items-center overflow-y-auto bar"
 			></div>
 		</div>
 	</div>

@@ -77,9 +77,6 @@ export async function PUT({ request }) {
         program_level
     } = await request.json();
 
-
-    console.log("Server ----------------- ",program_concentrations)
-
     
     if (!id) {
         return json({ message: 'Program ID is required for updating' }, { status: 400 });

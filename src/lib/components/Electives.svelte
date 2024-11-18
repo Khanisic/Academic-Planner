@@ -1,13 +1,15 @@
 <script>
 	import { csis } from '$lib/assets/mscs.js';
-	export let allCourses, selectedElective,step;
+	export let allCourses, selectedElective, step, courses, finalAllCourses;
 
 	const addLastCourse = (course) => {
 		selectedElective = course;
 		step = -6;
 		// allCourses = [...allCourses, course];
 
+		finalAllCourses = [...allCourses, selectedElective];
 	};
+
 </script>
 
 <div class="flex gap-5 items-center bg-transparent mt-1">
@@ -21,57 +23,57 @@
 	</div>
 </div>
 <div class="flex flex-wrap gap-2">
-	{#each csis.requirements.required_courses as required}
-		{#if !allCourses.includes(`${required.course_code} : ${required.course_name}`)}
+	{#each courses as required}
+		{#if !allCourses.includes(`${required.course_code} : ${required.course_title}`)}
 			<button
 				on:click={() => {
-					addLastCourse(`${required.course_code} : ${required.course_name}`);
+					addLastCourse(`${required.course_code} : ${required.course_title}`);
 				}}
-				class={`${selectedElective == `${required.course_code} : ${required.course_name}` ? 'bg-purple' : 'bg-lightpurple'} border-2 border-lightpurple  shadow-md font-base hover:bg-purple rounded-lg px-3 cursor-pointer hover:text-navy`}
+				class={`${selectedElective == `${required.course_code} : ${required.course_title}` ? 'bg-purple' : 'bg-lightpurple'} border-2 border-lightpurple  shadow-md font-base hover:bg-purple rounded-lg px-3 cursor-pointer hover:text-navy`}
 			>
-				{required.course_code} : {required.course_name}
+				{required.course_code} : {required.course_title}
 			</button>
 		{/if}
 
-		{#if !allCourses.includes(`${required.alternative.course_code} : ${required.alternative.course_name}`)}
+		<!-- {#if !allCourses.includes(`${required.alternative.course_code} : ${required.alternative.course_title}`)}
 			<button
 				on:click={() => {
 					addLastCourse(
-						`${required.alternative.course_code} : ${required.alternative.course_name}`
+						`${required.alternative.course_code} : ${required.alternative.course_title}`
 					);
 				}}
-				class={`${selectedElective == `${required.alternative.course_code} : ${required.alternative.course_name}` ? 'bg-purple' : 'bg-lightpurple'} border-2 border-lightpurple  shadow-md font-base hover:bg-purple rounded-lg px-3 cursor-pointer hover:text-navy`}
+				class={`${selectedElective == `${required.alternative.course_code} : ${required.alternative.course_title}` ? 'bg-purple' : 'bg-lightpurple'} border-2 border-lightpurple  shadow-md font-base hover:bg-purple rounded-lg px-3 cursor-pointer hover:text-navy`}
 			>
-				{required.alternative.course_code} : {required.alternative.course_name}
+				{required.alternative.course_code} : {required.alternative.course_title}
 			</button>
-		{/if}
+		{/if} -->
 	{/each}
-	{#each csis.concentrations as concentrations}
+	<!-- {#each csis.concentrations as concentrations}
 		{#each concentrations.required_courses as required_conc}
-			{#if !allCourses.includes(`${required_conc.course_code} : ${required_conc.course_name}`)}
+			{#if !allCourses.includes(`${required_conc.course_code} : ${required_conc.course_title}`)}
 				<button
 					on:click={() => {
-						addLastCourse(`${required_conc.course_code} : ${required_conc.course_name}`);
+						addLastCourse(`${required_conc.course_code} : ${required_conc.course_title}`);
 					}}
-					class={`${selectedElective == `${required_conc.course_code} : ${required_conc.course_name}` ? 'bg-purple' : 'bg-lightpurple'} border-2 border-lightpurple  shadow-md font-base hover:bg-purple rounded-lg px-3 cursor-pointer hover:text-navy`}
+					class={`${selectedElective == `${required_conc.course_code} : ${required_conc.course_title}` ? 'bg-purple' : 'bg-lightpurple'} border-2 border-lightpurple  shadow-md font-base hover:bg-purple rounded-lg px-3 cursor-pointer hover:text-navy`}
 				>
-					{required_conc.course_code} : {required_conc.course_name}
+					{required_conc.course_code} : {required_conc.course_title}
 				</button>
 			{/if}
 		{/each}
 		{#if concentrations.electives}
 			{#each concentrations.electives as electives_conc}
-				{#if !allCourses.includes(`${electives_conc.course_code} : ${electives_conc.course_name}`)}
+				{#if !allCourses.includes(`${electives_conc.course_code} : ${electives_conc.course_title}`)}
 					<button
 						on:click={() => {
-							addLastCourse(`${electives_conc.course_code} : ${electives_conc.course_name}`);
+							addLastCourse(`${electives_conc.course_code} : ${electives_conc.course_title}`);
 						}}
-						class={`${selectedElective == `${electives_conc.course_code} : ${electives_conc.course_name}` ? 'bg-purple' : 'bg-lightpurple'} border-2 border-lightpurple  shadow-md font-base hover:bg-purple rounded-lg px-3 cursor-pointer hover:text-navy`}
+						class={`${selectedElective == `${electives_conc.course_code} : ${electives_conc.course_title}` ? 'bg-purple' : 'bg-lightpurple'} border-2 border-lightpurple  shadow-md font-base hover:bg-purple rounded-lg px-3 cursor-pointer hover:text-navy`}
 					>
-						{electives_conc.course_code} : {electives_conc.course_name}
+						{electives_conc.course_code} : {electives_conc.course_title}
 					</button>
 				{/if}
 			{/each}
 		{/if}
-	{/each}
+	{/each} -->
 </div>

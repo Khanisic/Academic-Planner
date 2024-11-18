@@ -8,7 +8,7 @@
 	let edit = true;
 </script>
 
-<div class="p-10">
+<div class="p-10 overflow-y-auto bar h-full">
 	{#if openSemesterModal}
 		<AddSemester bind:openSemesterModal bind:edit {semester} />
 	{/if}

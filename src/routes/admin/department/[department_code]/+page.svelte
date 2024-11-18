@@ -24,7 +24,7 @@
 {#if openFacultyModal}
 	<AddFaculty bind:openFacultyModal {faculty} bind:edit />
 {/if}
-<div class="p-10">
+<div class="p-10 overflow-y-auto bar h-full">
 	<div class="flex gap-2 items-center">
 		<h1 class="font-calm text-bradley text-[60px]">{department.name} ({department.code})</h1>
 	</div>

@@ -14,23 +14,24 @@
 
 	let concentration1;
 	let concentration1Details = {};
-
 	let concentration2;
 	let concentration2Details = {};
-
-	// Step: 1 Seeing the requirements
 	let showProgramRequirements = false;
 	let showCoreRequirements = false;
 	let showConcRequirements = false;
 	let check = false;
-
 	let option;
-
 	let selectedCoreCourses = {};
-
 	let selectedConc1Courses = {};
 	let selectedConc2Courses = {};
-
+	let totalHours = 0;
+	let allCourses = [];
+	let finalCourses = [];
+	let selectedElective;
+	let hoursConc1;
+	let hoursConc2;
+	let selectedCoursesPopup = false;
+	let step = 0;
 	const showReq = (num) => {
 		if (num == 1) {
 			showProgramRequirements = !showProgramRequirements;
@@ -56,7 +57,7 @@
 			step = -3;
 		}
 	};
-	let totalHours = 0;
+
 	const addConc1Course = (code, hoursConc1) => {
 		if (selectedConc1Courses[code] == true) {
 			selectedConc1Courses[code] = false;
@@ -143,7 +144,6 @@
 			toast.error('Maximum electives reached, click on a selected elective to remove it!');
 		}
 
-
 		if (totalHours == 9) {
 			step = -5;
 			totalHours = 0;
@@ -154,7 +154,9 @@
 		step = 3;
 		selectedConc1Courses = {};
 		num == 1 ? (concentration1 = con) : (concentration2 = con);
-		concentration1Details = csis.concentrations.filter((concen) => concen.name == con)[0];
+		concentration1Details = program.program_concentrations.filter(
+			(concen) => concen.concentration_name == con
+		)[0];
 		for (let i = 0; i < concentration1Details.required_courses.length; i++) {
 			selectedConc1Courses[
 				`${concentration1Details.required_courses[i].course_code} : ${concentration1Details.required_courses[i].course_name}`
@@ -189,9 +191,7 @@
 			totalHours = 0;
 		}
 	};
-	let allCourses = [];
-	let finalCourses = []
-	let selectedElective;
+
 	const moveAhead = () => {
 		step = Math.abs(step);
 		if (step == 5) {
@@ -205,12 +205,6 @@
 			finalCourses = [...allCourses, selectedElective];
 		}
 	};
-	let hoursConc1;
-	let hoursConc2;
-
-	let selectedCoursesPopup = false;
-
-	let step = 0;
 </script>
 
 <Toaster class="font-calm" />
@@ -288,7 +282,6 @@
 {/if}
 
 <div class="p-5 md:p-20 flex flex-col gap-4 relative bg-transparent">
-	<ThemeSwitch />
 	<div class="w-full items-start justify-start flex flex-col gap-1 relative">
 		<h1 class="text-bradley font-calm text-2xl md:text-4xl bg-transparent">
 			Master's in Computer Science
@@ -350,7 +343,7 @@
 		{/if}
 
 		{#if step >= 6 || step <= -7}
-			<Paths bind:finalCourses  bind:step />
+			<Paths bind:finalCourses bind:step />
 		{/if}
 
 		<!-- {#if (option && optionSelected == false) || (Object.keys(selectedCoreCourses).length == 4 && coreSelected == false) || (conc1Selected = false && concentration1 || (hoursConc1 == 3 && Object.keys(selectedConc1Courses).length == 3) || (hoursConc1 == 6 && Object.keys(selectedConc1Courses).length == 2 && concentration1Details.name == "Emerging Topics in CS/CIS") || (hoursConc1 == 6 && Object.keys(selectedConc1Courses).length == 3 && concentration1Details.name != "Emerging Topics in CS/CIS") )} -->

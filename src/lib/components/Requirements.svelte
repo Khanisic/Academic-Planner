@@ -5,7 +5,8 @@
 		showConcRequirements,
 		showReq,
 		check,
-		startSelection, step;
+		program,
+		step;
 </script>
 
 <div>
@@ -51,8 +52,7 @@
 		<div class="flex flex-col gap-2 py-2">
 			<div class="flex gap-2">
 				<p class="font-base text-dark dark:text-white">
-					At least 21 of the 33 required hours must be earned in courses labeled CS. At most, six
-					hours may be earned in approved courses other than those labeled CS or CIS.
+					{program.program_requirements}
 				</p>
 			</div>
 		</div>
@@ -102,12 +102,10 @@
 		<div class="flex flex-col gap-2">
 			<div class="flex gap-2 py-2">
 				<p class="font-base text-dark dark:text-white w-fit">
-					To satisfy the core (breadth) requirement, four courses must be taken, one from each pair
-					given below (either by taking the course or showing evidence of the completion of an
-					equivalent course elsewhere)
+					{program.program_core_requirements}
 				</p>
 			</div>
-			<div class="flex flex-col">
+			<!-- <div class="flex flex-col">
 				{#each csis.requirements.required_courses as courses}
 					<p class="font-base text-dark dark:text-white w-fit">
 						<span class="font-semibold">{courses.course_code} {courses.course_name}</span> or
@@ -116,7 +114,7 @@
 						>
 					</p>
 				{/each}
-			</div>
+			</div> -->
 		</div>
 	{/if}
 </div>
@@ -164,9 +162,7 @@
 		<div class="flex flex-col gap-2 py-2">
 			<div class="flex gap-2">
 				<p class="font-base text-dark dark:text-white w-fit">
-					To satisfy the depth requirements, the student must take three courses from one of the
-					concentrations offered by the department. No course taken to satisfy the core requirement
-					may be counted as one of the three courses in this requirement.
+					{program.program_concentration_requirements}
 				</p>
 			</div>
 		</div>
@@ -193,7 +189,7 @@
 					step = 1;
 				}}
 				class="flex justify-center items-center px-7 rounded-lg dark:hover:text-sky transition-all ease-in-out duration-100 align-middle justify-self-center font-base text-lg bg-bradley text-white cursor-pointer"
-				><a class="bg-transparent" href="/department/csis">Start selecting courses</a>
+				><p class="bg-transparent" >Start selecting courses</p>
 			</button>
 		</div>
 	{:else}

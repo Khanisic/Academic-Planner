@@ -3,20 +3,18 @@
 
 	// Get the full URL of the page
 	let currentUrl = $page.url.toString();
-	console.log(currentUrl);
-
 	let len = currentUrl.split('/').length;
-	console.log(len);
 	let url = currentUrl.split('/')[3];
+
 </script>
 
-<div class="flex flex-col gap-10 px-4 py-10">
+<div class="flex flex-col gap-10 px-4 py-10 h-full sticky">
 	<div class="flex items-center gap-2 w-full justify-center">
-		<img src="bu.png" class="h-10 w-10" alt="" srcset="" />
+		<img src="../bu.png" class="h-10 w-10" alt="" srcset="" />
 		<p class="font-calm dark:text-white text-2xl">BU Planner</p>
 	</div>
 	<div class="font-calm text-lg group gap-3 flex flex-col items-center text-text">
-		<div class="flex gap-2 hover:text-blue cursor-pointer">
+		<a href="/admin" class="flex gap-2 hover:text-blue cursor-pointer">
 			<p class={` ${url == 'admin' && 'text-blue'}`}>Admin</p>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -28,8 +26,8 @@
 					d="M18.75 12.75h1.5a.75.75 0 0 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5ZM12 6a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 12 6ZM12 18a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 12 18ZM3.75 6.75h1.5a.75.75 0 1 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5ZM5.25 18.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 0 1.5ZM3 12a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 3 12ZM9 3.75a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM12.75 12a2.25 2.25 0 1 1 4.5 0 2.25 2.25 0 0 1-4.5 0ZM9 15.75a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z"
 				/>
 			</svg>
-		</div>
-		<div class="flex gap-2 hover:text-blue cursor-pointer">
+		</a>
+		<a href="/" class="flex gap-2 hover:text-blue cursor-pointer">
 			<p class={` ${url != 'admin' && len == 4 && 'text-blue'}`}>Home</p>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -44,7 +42,25 @@
 					d="m12 5.432 8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V21a.75.75 0 0 1-.75.75H5.625a1.875 1.875 0 0 1-1.875-1.875v-6.198a2.29 2.29 0 0 0 .091-.086L12 5.432Z"
 				/>
 			</svg>
+		</a>
+		<div class="flex gap-2 hover:text-blue cursor-pointer">
+			<p class={` ${url == 'path' && 'text-blue'}`}>Generate Paths</p>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke-width="1.5"
+				stroke="currentColor"
+				class={`${url == 'path' && 'text-blue'} size-6`}
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0Z"
+				/>
+			</svg>
 		</div>
+
 		<div class="flex gap-2 hover:text-blue cursor-pointer">
 			<p>Gen AI</p>
 			<svg

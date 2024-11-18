@@ -16,7 +16,7 @@
 </main>
 
 <div class="p-10">
-	<div class="flex gap-2 items-center">
+	<div class="flex gap-2 items-center ">
 		<h1 class="font-calm text-bradley text-2xl">
 			{course.course_dept.split(' ')[0]}
 			{course.course_code}
