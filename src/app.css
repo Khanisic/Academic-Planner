@@ -26,3 +26,39 @@ body {
     border-radius: 12px;
     height: 5px;
 }
+.ai-input {
+    bottom: 50%;
+    transition: bottom 1s ease-out;
+  }
+
+  .ai-input.animating {
+    animation: gen-ai-input 1s forwards; /* "forwards" keeps the final state */
+  }
+
+  @keyframes gen-ai-input {
+    from { bottom: 50%; }
+    to { bottom: 40px; }
+  }
+
+  @keyframes typewriter {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+  .title-animation {
+   animation: 
+      typewriter 1s steps(50) 1s 1 normal both, 
+      blinkingCursor 500ms steps(50) infinite normal;
+  }
+  
+  .cursor{
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      border-right: 2px solid ;
+      white-space: nowrap;
+  }
+
+  @keyframes blinkingCursor{
+    from { border-right-color: #979EDD; }
+    to { border-right-color: transparent; }
+  }

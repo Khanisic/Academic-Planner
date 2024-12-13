@@ -28,6 +28,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@google/generative-ai": "^0.21.0",
+		"marked": "^15.0.3",
 		"mongoose": "^8.7.1",
 		"svelte-dnd-action": "^0.9.52",
 		"svelte-french-toast": "^1.2.0"

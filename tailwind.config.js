@@ -6,12 +6,12 @@ export default {
     extend: {
       colors: {
         dark: '#0D0909',
-        purple: '#979EDD',
+        purple: '#3e236e',
         green: '#98D989',
         blue: '#A1BBDE',
         grey: '#CED5D8',
         yellow: '#D5DB35',
-        lightpurple: '#D6DAFC',
+        lightpurple: '#979EDD',
         lightgreen: '#D8F9D0',
         palegreen: '#E0E2BC',
         bradley: '#E53B45',
