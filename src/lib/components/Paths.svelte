@@ -4,20 +4,6 @@
 	export let step, finalCourses, allProfessors, selectedProfessors, currProbability;
 	let generatedData = [];
 
-	let test = [
-		'514 : Algorithms',
-		'571 : Database Management Systems',
-		'520 : Advanced Computer Architecture',
-		'590 : Fundamentals of Software Engineering',
-		'561 : Artificial Intelligence',
-		'562 : Machine Learning',
-		'563 : Knowledge Discovery and Data Mining',
-		'535 : Computer Networks and System Security',
-		'515 : Applied Cryptography',
-		'560 : Fundamentals of Data Science',
-		'531 : Web Development Technologies'
-	];
-
 	let fall2024 = [];
 	let spring2025 = [];
 	let fall2025 = [];
@@ -32,7 +18,7 @@
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ courses: test })
+				body: JSON.stringify({ courses: finalCourses })
 			});
 
 			if (!response.ok) {
@@ -76,7 +62,8 @@
 		console.log(fall2025total);
 		console.log(spring2025total);
 		console.log(spring2026total);
-		currProbability = (fall2024total + fall2025total + spring2025total + spring2026total)*100 / 11;
+		currProbability =
+			((fall2024total + fall2025total + spring2025total + spring2026total) * 100) / 11;
 	};
 </script>
 

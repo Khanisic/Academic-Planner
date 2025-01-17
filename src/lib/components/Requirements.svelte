@@ -179,7 +179,7 @@
 			class="w-4 h-4 accent-green dark:text-white text-dark outline-none"
 			type="checkbox"
 		/>
-		<p class="">I have read the course requirements and I'm ready to select my courses.</p>
+		<p bind={check} class="">I have read the course requirements and I'm ready to select my courses.</p>
 	</div>
 
 	{#if check}

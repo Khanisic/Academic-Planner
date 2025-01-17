@@ -9,7 +9,6 @@
 
 		finalAllCourses = [...allCourses, selectedElective];
 	};
-
 </script>
 
 <div class="flex gap-5 items-center bg-transparent mt-1">
@@ -19,19 +18,19 @@
 		5.
 	</div>
 	<div class="flex flex-col gap-2 bg-transparent">
-		<p class="dark:text-purple text-dark font-calm text-2xl bg-transparent">Select Elective(s)</p>
+		<p class="dark:text-white text-dark font-calm text-2xl bg-transparent">Select Elective(s)</p>
 	</div>
 </div>
 <div class="flex flex-wrap gap-2">
 	{#each courses as required}
-		{#if !allCourses.includes(`${required.course_code} : ${required.course_title}`)}
+		{#if !allCourses.includes(`${required.course_dept.split(" ")[0]} ${required.course_code} : ${required.course_title}`)}
 			<button
 				on:click={() => {
-					addLastCourse(`${required.course_code} : ${required.course_title}`);
+					addLastCourse(`${required.course_dept.split(' ')[0]} ${required.course_code} : ${required.course_title}`);
 				}}
-				class={`${selectedElective == `${required.course_code} : ${required.course_title}` ? 'bg-purple' : 'bg-lightpurple'} border-2 border-lightpurple  shadow-md font-base hover:bg-purple rounded-lg px-3 cursor-pointer hover:text-navy`}
+				class={`${selectedElective == `${required.course_dept.split(' ')[0]} ${required.course_code} : ${required.course_title}` ? 'bg-purple text-white' : 'bg-lightpurple'} text-ellipsis whitespace-nowrap h-6 hover:text-white border-lightpurple  shadow-md font-base hover:bg-purple rounded-lg px-3 cursor-pointer hover:text-navy`}
 			>
-				{required.course_code} : {required.course_title}
+				{required.course_dept.split(' ')[0]} {required.course_code} : {required.course_title}
 			</button>
 		{/if}
 

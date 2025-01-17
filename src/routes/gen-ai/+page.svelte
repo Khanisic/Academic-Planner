@@ -47,7 +47,7 @@
 						Please keep in mind that a student can enroll in maximum of 3 subjects or 9 credit hours per sem and he must complete his core courses in the first 2 semesters. 
 						Here is the information about the graduate catalog, faculty data and course descriptions. You are to strictly refer to the following provided jsons for making the academic plan. 
 						Please go through the guidelines mentioned in the graduate catalog.
-						
+
 
 Here is the graduate catalog
 ${JSON.stringify(gradCatalog)} 
@@ -425,7 +425,9 @@ ${JSON.stringify(CIS_courses)}
 							class:animating={chatHistory.length > 0}
 						>
 							<input
-								placeholder="Hey, I'm John Doe and want to make an academic plan for my Master's in Computer Science."
+								placeholder={chatHistory.length > 0
+									? `Message Bradley Academic Helper`
+									: `Hey, I'm John Doe and want to make an academic plan for my Master's in Computer Science.`}
 								class="bg-lightpurple dark:bg-text text-xl font-base placeholder:text-gray-100 dark:placeholder:text-gray-400 outline-none w-full border-none px-6 py-3 rounded-full"
 								bind:value={prompt}
 							/>

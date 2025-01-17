@@ -90,14 +90,14 @@
 		let electivesTaken;
 
 		let course = concentration1Details.concentration_elective_courses.filter(
-			(conc) => conc.course_code == code.split(' ')[0]
+			(conc) => conc.course_code == code.split(' ')[1]
 		);
 
 		if (Object.keys(selectedConc1Courses).length == 1 && hoursConc1 == 6) {
 			electivesCanTake = 1;
 			electivesTaken = Object.keys(selectedConc1Courses).length - 1;
 		} else if (Object.keys(selectedConc1Courses).length == 2 && hoursConc1 == 6) {
-			if (concentration1Details.name == 'Emerging Topics in CS/CIS') {
+			if (concentration1Details.name == 'Emerging Topics in Computer Information Systems') {
 				electivesCanTake = 0;
 				electivesTaken = 1;
 			} else {
@@ -136,14 +136,14 @@
 		let electivesTaken;
 
 		let course = concentration2Details.concentration_elective_courses.filter(
-			(conc) => conc.course_code == code.split(' ')[0]
+			(conc) => conc.course_code == code.split(' ')[1]
 		);
 
 		if (Object.keys(selectedConc2Courses).length == 1 && hoursConc2 == 6) {
 			electivesCanTake = 1;
 			electivesTaken = Object.keys(selectedConc2Courses).length - 1;
 		} else if (Object.keys(selectedConc2Courses).length == 2 && hoursConc2 == 6) {
-			if (concentration2Details.name == 'Emerging Topics in CS/CIS') {
+			if (concentration2Details.name == 'Emerging Topics in Computer Information Systems') {
 				electivesCanTake = 0;
 				electivesTaken = 1;
 			} else {
@@ -180,7 +180,7 @@
 		)[0];
 		for (let i = 0; i < concentration1Details.concentration_required_courses.length; i++) {
 			selectedConc1Courses[
-				`${concentration1Details.concentration_required_courses[i].course_code} : ${concentration1Details.concentration_required_courses[i].course_title}`
+				`${concentration1Details.concentration_required_courses[i].course_dept.split(" ")[0]} ${concentration1Details.concentration_required_courses[i].course_code} : ${concentration1Details.concentration_required_courses[i].course_title}`
 			] = true;
 		}
 		hoursConc1 = concentration1Details.concentration_required_courses.reduce((total, course) => {
@@ -202,7 +202,7 @@
 		)[0];
 		for (let i = 0; i < concentration2Details.concentration_required_courses.length; i++) {
 			selectedConc2Courses[
-				`${concentration2Details.concentration_required_courses[i].course_code} : ${concentration2Details.concentration_required_courses[i].course_title}`
+				`${concentration2Details.concentration_required_courses[i].course_dept.split(" ")[0]} ${concentration2Details.concentration_required_courses[i].course_code} : ${concentration2Details.concentration_required_courses[i].course_title}`
 			] = true;
 		}
 		hoursConc2 = concentration2Details.concentration_required_courses.reduce((total, course) => {
@@ -226,7 +226,7 @@
 		}
 		if (step == 6) {
 			finalCourses = [...allCourses, selectedElective];
-
+			console.log(finalCourses);
 			// Make call here
 		}
 	};
@@ -314,7 +314,7 @@
 						/>{/if}
 
 					{#if step >= 6 || step <= -7}<Paths
-					bind:currProbability
+							bind:currProbability
 							bind:selectedProfessors
 							bind:allProfessors
 							bind:finalCourses
@@ -349,7 +349,9 @@
 						<div
 							class="text-text w-[220px] justify-center items-center border-lightBorder dark:hover:text-bradley dark:hover:border-bradley hover:text-blue hover:border-blue dark:border-darkBorder border-[1px] flex flex-col gap-2 font-calm bg-leftBar dark:bg-darkLeftBar px-3 py-2 rounded-2xl"
 						>
-							<p class="font-calm text-xl text-center text-black dark:text-white">Probability of Current Path:</p>
+							<p class="font-calm text-xl text-center text-black dark:text-white">
+								Probability of Current Path:
+							</p>
 							<p class="text-xl">{currProbability.toFixed(2)} %</p>
 						</div>
 
@@ -416,7 +418,7 @@
 									class="text-text w-[220px] justify-center items-center border-lightBorder dark:hover:text-green dark:hover:border-green hover:text-black hover:border-black dark:border-darkBorder border-[1px] flex gap-2 font-calm bg-leftBar dark:bg-darkLeftBar px-3 py-1 rounded-2xl"
 								>
 									<p class="font-calm">{index + 1}:</p>
-									<p class="font-calm text-center overflow-hidden">CS {courses.slice(0, 20)}</p>
+									<p class="font-calm text-center overflow-hidden">{courses.slice(0, 20)}</p>
 								</div>
 							{/each}
 
@@ -430,7 +432,7 @@
 										class="text-text w-[220px] justify-center items-center border-lightBorder dark:hover:text-blue dark:hover:border-blue hover:text-black hover:border-black dark:border-darkBorder border-[1px] flex gap-2 font-calm bg-leftBar dark:bg-darkLeftBar px-3 py-1 rounded-2xl"
 									>
 										<p class="font-calm">{index + 5}:</p>
-										<p class="font-calm text-center overflow-hidden">CS {courses.slice(0, 25)}</p>
+										<p class="font-calm text-center overflow-hidden">{courses.slice(0, 25)}</p>
 									</div>
 								{/each}
 							{/if}
@@ -443,7 +445,7 @@
 										class="text-text w-[220px] justify-center items-center border-lightBorder dark:hover:text-yellow dark:hover:border-yellow hover:text-black hover:border-black dark:border-darkBorder border-[1px] flex gap-2 font-calm bg-leftBar dark:bg-darkLeftBar px-3 py-1 rounded-2xl"
 									>
 										<p class="font-calm">{index + 5}:</p>
-										<p class="font-calm text-center overflow-hidden">CS {courses.slice(0, 25)}</p>
+										<p class="font-calm text-center overflow-hidden">{courses.slice(0, 25)}</p>
 									</div>
 								{/each}
 							{/if}
@@ -457,7 +459,7 @@
 									<div class=" px-2 py-1 rounded-xl gap-1 flex">
 										<p class="font-calm">{11}:</p>
 										<p class="font-calm text-center overflow-hidden">
-											CS {selectedElective.slice(0, 20)}
+											{selectedElective.slice(0, 20)}
 										</p>
 									</div>
 								</div>
