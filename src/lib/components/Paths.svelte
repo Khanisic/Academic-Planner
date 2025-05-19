@@ -1,14 +1,39 @@
 <script>
 	import { onMount } from 'svelte';
 	import VerticalList from './VerticalList.svelte';
-	export let step, finalCourses, allProfessors, selectedProfessors, currProbability;
+	import toast from 'svelte-french-toast';
+	export let step, finalCourses, allProfessors, selectedProfessors, currProbability, selectedIntake;
 	let generatedData = [];
 
-	let fall2024 = [];
-	let spring2025 = [];
-	let fall2025 = [];
-	let spring2026 = [];
+	let semesters = [];
+	let semesterData = {};
 	let semSelection = true;
+	let availableCourses = []; // New variable to track available courses
+
+	// Function to generate semesters based on selected intake
+	function generateSemesters(startIntake) {
+		const [season, year] = startIntake.split(' ');
+		const yearNum = parseInt(year);
+		const seasons = ['Spring', 'Fall'];
+		const startIndex = seasons.indexOf(season);
+		
+		semesters = [];
+		semesterData = {};
+		
+		// Generate 4 semesters starting from the selected intake
+		for (let i = 0; i < 4; i++) {
+			const currentSeason = seasons[(startIndex + i) % 2];
+			const currentYear = yearNum + Math.floor((startIndex + i) / 2);
+			const semesterName = `${currentSeason} ${currentYear}`;
+			semesters.push(semesterName);
+			semesterData[semesterName] = [];
+		}
+	}
+
+	// Initialize semesters when selectedIntake changes
+	$: if (selectedIntake) {
+		generateSemesters(selectedIntake);
+	}
 
 	onMount(async () => {
 		try {
@@ -30,41 +55,73 @@
 			let res = await response.json();
 
 			generatedData = res.courseData;
+			availableCourses = [...generatedData]; // Initialize available courses
 			allProfessors = res.allProfessors;
-			console.log('Generated Data:', generatedData);
-			console.log('Proessors:', allProfessors);
 			selectedProfessors = [...allProfessors];
 		} catch (error) {
 			console.error('Error fetching generated data:', error);
 		}
 	});
 
-	let fall24 = true;
-	let spring25 = true;
-	let fall25 = true;
-	let spring26 = true;
-
 	const calculateTotalProb = () => {
-		console.log(fall2024);
-		let fall2024total = fall2024.reduce((accumulator, currentValue) => {
-			return accumulator + currentValue.fall_availability;
-		}, 0);
-		let fall2025total = fall2025.reduce((accumulator, currentValue) => {
-			return accumulator + currentValue.fall_availability;
-		}, 0);
-		let spring2025total = spring2025.reduce((accumulator, currentValue) => {
-			return accumulator + currentValue.fall_availability;
-		}, 0);
-		let spring2026total = spring2026.reduce((accumulator, currentValue) => {
-			return accumulator + currentValue.fall_availability;
-		}, 0);
-		console.log(fall2024total);
-		console.log(fall2025total);
-		console.log(spring2025total);
-		console.log(spring2026total);
-		currProbability =
-			((fall2024total + fall2025total + spring2025total + spring2026total) * 100) / 11;
+		if (reset) {
+			currProbability = 0;
+			return;
+		}
+		let totalProbability = 0;
+		let totalCourses = 0;
+
+		// Calculate probability for each semester
+		semesters.forEach(semester => {
+			const semesterCourses = semesterData[semester] || [];
+			const semesterTotal = semesterCourses.reduce((acc, course) => acc + course.fall_availability, 0);
+			totalProbability += semesterTotal;
+			totalCourses += semesterCourses.length;
+		});
+
+		currProbability = (totalProbability * 100) / totalCourses;
 	};
+
+	// Function to check if a semester has reached its course limit
+	function canAddCourse(semester) {
+		const semesterIndex = semesters.indexOf(semester);
+		// First 3 semesters have a limit of 3 courses
+		if (semesterIndex < 3) {
+			return (semesterData[semester]?.length || 0) < 3;
+		}
+		return true; // No limit for the last semester
+	}
+
+	// Function to handle course movement between semesters
+	function handleCourseMove(course, fromSemester, toSemester) {
+		if (!canAddCourse(toSemester)) {
+			toast.error('Maximum 3 courses allowed in the first 3 semesters');
+			return false;
+		}
+
+		if (fromSemester) {
+			semesterData[fromSemester] = semesterData[fromSemester].filter(c => c !== course);
+			availableCourses = [...availableCourses, course];
+		}
+		if (toSemester) {
+			semesterData[toSemester] = [...(semesterData[toSemester] || []), course];
+			availableCourses = availableCourses.filter(c => c !== course);
+		}
+		calculateTotalProb();
+		return true;
+	}
+
+	// Function to reset all courses
+	function resetCourses() {
+		// Move all courses back to available courses
+		semesters.forEach(semester => {
+			if (semesterData[semester]) {
+				availableCourses = [...availableCourses, ...semesterData[semester]];
+				semesterData[semester] = [];
+			}
+		});
+		calculateTotalProb("reset");
+	}
 </script>
 
 <div class="flex flex-col gap-2">
@@ -72,64 +129,43 @@
 		<div
 			class="dark:bg-purple bg-purple flex justify-center items-center text-white font-calm w-10 h-10 rounded-xl"
 		>
-			6.
+			7.
 		</div>
 		<div class="flex flex-col gap-2 bg-transparent">
-			<p class="dark:text-purple text-dark font-calm text-2xl bg-transparent">Create your path</p>
-			<!-- <button
-				on:click={() => {
-					console.log(fall2024);
-				}}>Check Fall 2024 array</button
-			> -->
+			<p class="dark:text-lightpurple text-dark font-calm text-2xl bg-transparent">Create your path</p>
 		</div>
+		<button
+			on:click={resetCourses}
+			class="flex items-center gap-2 px-4 py-2 rounded-lg bg-bradley text-white hover:bg-white dark:bg-darkInner hover:text-bradley dark:hover:bg-darkBg dark:hover:text-white transition-colors duration-200"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+			</svg>
+			<p class="font-base">Reset Courses</p>
+		</button>
 	</div>
-	{#if generatedData.length > 0}
+	{#if generatedData.length > 0 && semesters.length > 0}
 		<div class="flex gap-4">
 			<div class="w-1/2">
 				<p class="font-calm text-black dark:text-white">Your Courses:</p>
-				<VerticalList items={generatedData} />
+				<VerticalList items={availableCourses} semSelection={false} />
 			</div>
 			<div class="w-1/2">
-				<div>
-					<p class="font-calm text-black dark:text-white">Fall 2024:</p>
-					<VerticalList
-						{calculateTotalProb}
-						bind:fall24
-						bind:semSelection
-						bind:fall2024
-						items={fall2024}
-					/>
-				</div>
-				<div>
-					<p class="font-calm text-black dark:text-white">Spring 2025:</p>
-					<VerticalList
-						{calculateTotalProb}
-						bind:spring25
-						bind:semSelection
-						bind:spring2025
-						items={spring2025}
-					/>
-				</div>
-				<div>
-					<p class="font-calm text-black dark:text-white">Fall 2025:</p>
-					<VerticalList
-						{calculateTotalProb}
-						bind:fall25
-						bind:semSelection
-						bind:fall2025
-						items={fall2025}
-					/>
-				</div>
-				<div>
-					<p class="font-calm text-black dark:text-white">Spring 2026:</p>
-					<VerticalList
-						{calculateTotalProb}
-						bind:spring26
-						bind:semSelection
-						bind:spring2026
-						items={spring2026}
-					/>
-				</div>
+				{#each semesters as semester}
+					<div>
+						<p class="font-calm text-black dark:text-white">{semester}:</p>
+						<VerticalList
+							{calculateTotalProb}
+							bind:semSelection
+							items={semesterData[semester] || []}
+							{semester}
+							on:courseMove={(e) => handleCourseMove(e.detail.course, e.detail.from, semester)}
+						/>
+						{#if semesters.indexOf(semester) < 3}
+							<p class="text-sm font-base text-gray-500">(Max 3 courses)</p>
+						{/if}
+					</div>
+				{/each}
 			</div>
 		</div>
 	{:else}

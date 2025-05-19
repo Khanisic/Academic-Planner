@@ -1,5 +1,6 @@
 export const departments = [
-    { "name": "Academic Exploration Program", "code": "AEP" },
+    { "name": "Computer Science", "code": "CS" },
+    { "name": "More Departments Coming Soon!", "code": "" },
     // { "name": "Accounting", "code": "ATG" },
     // { "name": "African American Studies", "code": "AAS" },
     // { "name": "Anthropology", "code": "ANT" },
@@ -18,8 +19,6 @@ export const departments = [
     // { "name": "Comm. Sci and Disorders", "code": "CSD" },
     // { "name": "Communication", "code": "COM" },
     // { "name": "Communication & Fine Art", "code": "CFA" },
-    { "name": "Computer Information Systems", "code": "CIS" },
-    { "name": "Computer Science", "code": "CS" },
     // { "name": "Construction", "code": "CON" },
     // { "name": "Criminology", "code": "CRM" },
     // { "name": "Economics", "code": "ECO" },

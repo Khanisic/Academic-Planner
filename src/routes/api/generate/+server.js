@@ -58,6 +58,11 @@ export async function POST({ request }) {
             const springProfessors = [];
 
 
+            // Update: Need to filter from selected semester - default is last 3 semesters
+            // Update: Need to filter from selected professors
+
+
+
             // Iterate through each offering to gather data
             for (let offer of offerings) {
                 // Find the semester that includes this course offering
@@ -111,11 +116,6 @@ export async function POST({ request }) {
             const springAvailability = totalSemesters ? springCount / totalSpringSemesters : 0;
 
 
-            // console.log(course.course_title, " : Total Semesters", totalSemesters)
-            // console.log(course.course_title, " : Fall Semesters", fallAvailability.toFixed(2))
-            // console.log(course.course_title, " : Spring Semesters", springAvailability.toFixed(2))
-
-            // Structure the data as required
             courseData.push({
                 id: course._id,
                 course: `${course.course_dept} ${code} : ${title}`,

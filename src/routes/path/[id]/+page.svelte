@@ -7,6 +7,7 @@
 	import Electives from '../../../lib/components/Electives.svelte';
 	import Paths from '../../../lib/components/Paths.svelte';
 	import Requirements from '../../../lib/components/Requirements.svelte';
+	import IntakeSelection from '../../../lib/components/IntakeSelection.svelte';
 	import toast, { Toaster } from 'svelte-french-toast';
 	import LeftBar from '../../../lib/components/LeftBar.svelte';
 	import UpperBar from '../../../lib/components/UpperBar.svelte';
@@ -20,6 +21,7 @@
 	let showProgramRequirements = false;
 	let showCoreRequirements = false;
 	let showConcRequirements = false;
+	let selectingSecondConcentration = false;
 	let check = false;
 	let option;
 	let selectedCoreCourses = {};
@@ -28,7 +30,7 @@
 	let totalHours = 0;
 	let allCourses = [];
 	let finalCourses = [];
-	let selectedElective;
+	let selectedElective = [];
 	let hoursConc1;
 	let hoursConc2;
 	let selectedCoursesPopup = false;
@@ -37,6 +39,7 @@
 	let title = 'Bradley University Academic Planner';
 	let finalAllCourses = [];
 	let allProfessors = [];
+	let selectedIntake = '';
 
 	onMount(async () => {
 		try {
@@ -80,18 +83,25 @@
 	};
 
 	const addConc1Course = (code, hoursConc1) => {
+		let course = concentration1Details.concentration_elective_courses.filter(
+			(conc) => conc.course_code == code.split(' ')[1]
+		);
+
 		if (selectedConc1Courses[code] == true) {
 			selectedConc1Courses[code] = false;
+			console.log('total house before', totalHours);
+			console.log('course credit hours', course[0].course_credit_hours);
+			totalHours -= course[0].course_credit_hours;
+			console.log('total house after', totalHours);
 			delete selectedConc1Courses[code];
+			if (totalHours < 9) {
+				step = 3;
+			}
 
 			return;
 		}
 		let electivesCanTake;
 		let electivesTaken;
-
-		let course = concentration1Details.concentration_elective_courses.filter(
-			(conc) => conc.course_code == code.split(' ')[1]
-		);
 
 		if (Object.keys(selectedConc1Courses).length == 1 && hoursConc1 == 6) {
 			electivesCanTake = 1;
@@ -121,23 +131,32 @@
 
 		if (totalHours == 9) {
 			step = -4;
-			totalHours = 0;
+		} else {
+			step = 3;
 		}
+
+		console.log(totalHours);
+		console.log(step);
 	};
 
 	const addConc2Course = (code, hoursConc2) => {
+		let course = concentration2Details.concentration_elective_courses.filter(
+			(conc) => conc.course_code == code.split(' ')[1]
+		);
+
 		if (selectedConc2Courses[code] == true) {
 			selectedConc2Courses[code] = false;
+			totalHours -= course[0].course_credit_hours;
 			delete selectedConc2Courses[code];
+			if (totalHours < 9) {
+				step = 4;
+			}
+
 			return;
 		}
 
 		let electivesCanTake;
 		let electivesTaken;
-
-		let course = concentration2Details.concentration_elective_courses.filter(
-			(conc) => conc.course_code == code.split(' ')[1]
-		);
 
 		if (Object.keys(selectedConc2Courses).length == 1 && hoursConc2 == 6) {
 			electivesCanTake = 1;
@@ -167,7 +186,8 @@
 
 		if (totalHours == 9) {
 			step = -5;
-			totalHours = 0;
+		} else {
+			step = 4;
 		}
 	};
 
@@ -180,7 +200,7 @@
 		)[0];
 		for (let i = 0; i < concentration1Details.concentration_required_courses.length; i++) {
 			selectedConc1Courses[
-				`${concentration1Details.concentration_required_courses[i].course_dept.split(" ")[0]} ${concentration1Details.concentration_required_courses[i].course_code} : ${concentration1Details.concentration_required_courses[i].course_title}`
+				`${concentration1Details.concentration_required_courses[i].course_dept.split(' ')[0]} ${concentration1Details.concentration_required_courses[i].course_code} : ${concentration1Details.concentration_required_courses[i].course_title}`
 			] = true;
 		}
 		hoursConc1 = concentration1Details.concentration_required_courses.reduce((total, course) => {
@@ -194,6 +214,7 @@
 	};
 
 	const setConcentration2 = (con, num) => {
+		totalHours = 0;
 		step = 4;
 		selectedConc2Courses = {};
 		num == 1 ? (concentration1 = con) : (concentration2 = con);
@@ -202,7 +223,7 @@
 		)[0];
 		for (let i = 0; i < concentration2Details.concentration_required_courses.length; i++) {
 			selectedConc2Courses[
-				`${concentration2Details.concentration_required_courses[i].course_dept.split(" ")[0]} ${concentration2Details.concentration_required_courses[i].course_code} : ${concentration2Details.concentration_required_courses[i].course_title}`
+				`${concentration2Details.concentration_required_courses[i].course_dept.split(' ')[0]} ${concentration2Details.concentration_required_courses[i].course_code} : ${concentration2Details.concentration_required_courses[i].course_title}`
 			] = true;
 		}
 		hoursConc2 = concentration2Details.concentration_required_courses.reduce((total, course) => {
@@ -215,8 +236,28 @@
 		}
 	};
 
-	const moveAhead = () => {
-		step = Math.abs(step);
+	const moveAhead = (type) => {
+		console.log(type);
+		console.log(step);
+
+		if (type == 'electives') {
+			step = 5;
+			allCourses = Object.keys({
+				...selectedCoreCourses,
+				...selectedConc1Courses
+			});
+			return;
+		}
+
+		if (step == -3) {
+			if (!type) {
+				step = Math.abs(step);
+				selectingSecondConcentration = true;
+			}
+		} else {
+			step = Math.abs(step);
+		}
+
 		if (step == 5) {
 			allCourses = Object.keys({
 				...selectedCoreCourses,
@@ -225,10 +266,16 @@
 			});
 		}
 		if (step == 6) {
-			finalCourses = [...allCourses, selectedElective];
-			console.log(finalCourses);
-			// Make call here
+			
+			// step = 7; // Move to the next step after intake selection
 		}
+
+		if (step == 7) {
+			finalCourses = [...allCourses, ...selectedElective];
+			console.log(finalCourses);
+		}
+
+		console.log(step);
 	};
 
 	let selectedProfessors = [];
@@ -273,18 +320,18 @@
 						/>
 					{/if}
 
-					{#if (step >= 1 && step < 6) || step <= -2}<CourseOption
+					{#if (step >= 1 && step < 7) || step <= -2}<CourseOption
 							bind:option
 							bind:step
 							{setOption}
 						/>{/if}
-					{#if (step >= 2 && step < 6) || step <= -3}<CoreCourses
+					{#if (step >= 2 && step < 7) || step <= -3}<CoreCourses
 							bind:selectedCoreCourses
 							{addCoreCourse}
 							{program}
 						/>{/if}
 
-					{#if (step >= 3 && step < 6) || step <= -4}<Conc1
+					{#if (step >= 3 && step < 7) || step <= -4}<Conc1
 							bind:concentration1Details
 							{setConcentration1}
 							bind:concentration1
@@ -294,7 +341,7 @@
 							{program}
 						/>{/if}
 
-					{#if (step >= 4 && step < 6) || step <= -5}<Conc2
+					{#if (step >= 4 && step < 7 && selectingSecondConcentration) || (step <= -5 && selectingSecondConcentration)}<Conc2
 							bind:concentration2Details
 							{setConcentration2}
 							bind:concentration2
@@ -305,31 +352,47 @@
 							{program}
 						/>{/if}
 
-					{#if (step >= 5 && step < 6) || step <= -6}<Electives
+					{#if (step >= 5 && step < 7) || step <= -6}<Electives
 							bind:allCourses
 							bind:selectedElective
 							bind:step
 							bind:finalAllCourses
+							bind:selectingSecondConcentration
 							{courses}
 						/>{/if}
 
-					{#if step >= 6 || step <= -7}<Paths
+					{#if (step >= 6 && step < 7) || step <= -7}
+						<IntakeSelection bind:selectedIntake bind:step />
+					{/if}
+
+					{#if step >= 7 || step <= -8}<Paths
 							bind:currProbability
 							bind:selectedProfessors
 							bind:allProfessors
 							bind:finalCourses
 							bind:step
+							selectedIntake={selectedIntake}
 						/>{/if}
 
 					{#if step < 0}
-						<div class="flex justify-start items-start bg-transparent">
+						<div class="flex justify-start gap-2 items-start bg-transparent">
 							<button
 								on:click={() => {
 									moveAhead();
 								}}
-								class="flex justify-center items-center px-7 rounded-lg dark:hover:text-sky transition-all ease-in-out duration-100 align-middle justify-self-center font-base text-lg bg-bradley text-white cursor-pointer"
-								><p class="bg-transparent">Next</p>
+								class="flex justify-center items-center px-7 rounded-lg dark:hover:text-sky transition-all ease-in-out duration-100 align-middle justify-self-center font-base text-lg hover:text-bradley hover:bg-white hover:border-bradley hover:border-[1px] bg-bradley text-white cursor-pointer"
+								><p class="bg-transparent">{step == -4 ? 'Select Second Concentration' : 'Next'}</p>
 							</button>
+							{#if step == -4}
+								<button
+									on:click={() => {
+										selectingSecondConcentration = false;
+										moveAhead('electives');
+									}}
+									class="flex justify-center items-center px-7 rounded-lg dark:hover:text-sky transition-all ease-in-out duration-100 align-middle justify-self-center font-base text-lg hover:text-bradley hover:bg-white hover:border-bradley hover:border-[1px] bg-bradley text-white cursor-pointer"
+									><p class="bg-transparent">Skip to Electives</p>
+								</button>
+							{/if}
 						</div>
 					{/if}
 				</div>
@@ -339,7 +402,7 @@
 				class="w-[23%] top-0 sticky flex flex-col gap-3 px-2 pt-3 items-center overflow-y-auto bar"
 			>
 				<div class=" group flex flex-col gap-2 px-2 pb-3">
-					{#if step == 6}
+					{#if step >= 7}
 						<p class="font-base text-text">
 							Drag and drop the courses in the respective semesters to know the probability of
 							getting that course for that semester, additionally apply filters to get the best
@@ -452,17 +515,16 @@
 							<div
 								class="border-b-lightBorder w-1/2 mb-3 group dark:border-b-darkBorder border-r-0 border-l-0 border-t-0 border-[1px] flex flex-col gap-2 px-2 pb-3 text-center items-center"
 							></div>
-							{#if selectedElective}
-								<div
-									class="text-text w-[220px] justify-center items-center border-lightBorder dark:hover:text-bradley dark:hover:border-bradley hover:text-black hover:border-black dark:border-darkBorder border-[1px] flex gap-2 font-calm bg-leftBar dark:bg-darkLeftBar px-3 py-1 rounded-2xl"
-								>
-									<div class=" px-2 py-1 rounded-xl gap-1 flex">
-										<p class="font-calm">{11}:</p>
-										<p class="font-calm text-center overflow-hidden">
-											{selectedElective.slice(0, 20)}
-										</p>
+
+							{#if selectedElective.length > 0}
+								{#each selectedElective as courses, index}
+									<div
+										class="text-text w-[220px] justify-center items-center border-lightBorder dark:hover:text-yellow dark:hover:border-yellow hover:text-black hover:border-black dark:border-darkBorder border-[1px] flex gap-2 font-calm bg-leftBar dark:bg-darkLeftBar px-3 py-1 rounded-2xl"
+									>
+										<p class="font-calm">{index + 5}:</p>
+										<p class="font-calm text-center overflow-hidden">{courses.slice(0, 25)}</p>
 									</div>
-								</div>
+								{/each}
 							{/if}
 						</div>
 					{/if}

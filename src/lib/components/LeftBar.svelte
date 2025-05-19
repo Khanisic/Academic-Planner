@@ -13,7 +13,7 @@
 		<p class="font-calm dark:text-white text-2xl">BU Planner</p>
 	</div>
 	<div class="font-calm text-lg group gap-3 flex flex-col items-center text-text">
-		<a href="/admin" class="flex gap-2 hover:text-blue cursor-pointer">
+		<!-- <a href="/admin" class="flex gap-2 hover:text-blue cursor-pointer">
 			<p class={` ${url == 'admin' && 'text-blue'}`}>Admin</p>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -25,14 +25,14 @@
 					d="M18.75 12.75h1.5a.75.75 0 0 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5ZM12 6a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 12 6ZM12 18a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 12 18ZM3.75 6.75h1.5a.75.75 0 1 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5ZM5.25 18.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 0 1.5ZM3 12a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 3 12ZM9 3.75a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM12.75 12a2.25 2.25 0 1 1 4.5 0 2.25 2.25 0 0 1-4.5 0ZM9 15.75a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z"
 				/>
 			</svg>
-		</a>
+		</a> -->
 		<a href="/" class="flex gap-2 hover:text-blue cursor-pointer">
-			<p class={` ${url != 'admin' && len == 4 && 'text-blue'}`}>Home</p>
+			<p class={` ${!url && 'text-blue'}`}>Home</p>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 24 24"
 				fill="currentColor"
-				class={`${url != 'admin' && len == 4 && 'text-blue'} size-6`}
+				class={`${!url  && 'text-blue'} size-6`}
 			>
 				<path
 					d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.061l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.689Z"
@@ -42,32 +42,34 @@
 				/>
 			</svg>
 		</a>
-		<div class="flex gap-2 hover:text-blue cursor-pointer">
-			<p class={` ${url == 'path' && 'text-blue'}`}>Generate Paths</p>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke-width="1.5"
-				stroke="currentColor"
-				class={`${url == 'path' && 'text-blue'} size-6`}
-			>
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0Z"
-				/>
-			</svg>
-		</div>
+		<a href="/path" class="flex gap-2 hover:text-blue cursor-pointer">
+			<div class="flex gap-2 hover:text-blue cursor-pointer">
+				<p class={` ${url == 'path' && 'text-blue'}`}>Generate Paths</p>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					class={`${url == 'path' && 'text-blue'} size-6`}
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0Z"
+					/>
+				</svg>
+			</div>
+		</a>
 
 		<a href="/gen-ai" class="flex gap-2 hover:text-blue cursor-pointer">
 			<div class="flex gap-2 hover:text-blue cursor-pointer">
-				<p>Gen AI</p>
+				<p class={` ${url == 'gen-ai' && 'text-blue'}`} >Gen AI</p>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 24 24"
 					fill="currentColor"
-					class="size-6"
+					class={` ${url == 'gen-ai' && 'text-blue'} size-6`}
 				>
 					<path
 						fill-rule="evenodd"
@@ -95,7 +97,8 @@
 				/>
 			</svg>
 		</div>
-		<div class="flex gap-2 hover:text-blue cursor-pointer">
+
+		<!-- <div class="flex gap-2 hover:text-blue cursor-pointer">
 			<p>Rate Profs.</p>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -112,21 +115,26 @@
 					d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z"
 				/>
 			</svg>
-		</div>
-		<div class="flex gap-2 hover:text-blue cursor-pointer">
-			<p>Contact</p>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 24 24"
-				fill="currentColor"
-				class="size-6"
-			>
-				<path
-					fill-rule="evenodd"
-					d="M4.848 2.771A49.144 49.144 0 0 1 12 2.25c2.43 0 4.817.178 7.152.52 1.978.292 3.348 2.024 3.348 3.97v6.02c0 1.946-1.37 3.678-3.348 3.97a48.901 48.901 0 0 1-3.476.383.39.39 0 0 0-.297.17l-2.755 4.133a.75.75 0 0 1-1.248 0l-2.755-4.133a.39.39 0 0 0-.297-.17 48.9 48.9 0 0 1-3.476-.384c-1.978-.29-3.348-2.024-3.348-3.97V6.741c0-1.946 1.37-3.68 3.348-3.97ZM6.75 8.25a.75.75 0 0 1 .75-.75h9a.75.75 0 0 1 0 1.5h-9a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H7.5Z"
-					clip-rule="evenodd"
-				/>
-			</svg>
-		</div>
+		</div> -->
+
+
+		<a href="/contact">
+			<div class="flex gap-2 hover:text-blue cursor-pointer">
+				<p class={` ${url == 'contact' && 'text-blue'}`} >Contact</p>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					fill="currentColor"
+					class={` ${url == 'contact' && 'text-blue'} size-6`}
+				
+				>
+					<path
+						fill-rule="evenodd"
+						d="M4.848 2.771A49.144 49.144 0 0 1 12 2.25c2.43 0 4.817.178 7.152.52 1.978.292 3.348 2.024 3.348 3.97v6.02c0 1.946-1.37 3.678-3.348 3.97a48.901 48.901 0 0 1-3.476.383.39.39 0 0 0-.297.17l-2.755 4.133a.75.75 0 0 1-1.248 0l-2.755-4.133a.39.39 0 0 0-.297-.17 48.9 48.9 0 0 1-3.476-.384c-1.978-.29-3.348-2.024-3.348-3.97V6.741c0-1.946 1.37-3.68 3.348-3.97ZM6.75 8.25a.75.75 0 0 1 .75-.75h9a.75.75 0 0 1 0 1.5h-9a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H7.5Z"
+						clip-rule="evenodd"
+					/>
+				</svg>
+			</div>
+		</a>
 	</div>
 </div>
