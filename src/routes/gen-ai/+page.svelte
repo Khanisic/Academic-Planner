@@ -72,7 +72,7 @@ ${JSON.stringify(CIS_courses)}
 		]
 	});
 
-	const genAI = new GoogleGenerativeAI('AIzaSyAuyg98U40DUxD9nnf3bKRg05JcG9Rq388');
+	const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 	const model = genAI.getGenerativeModel({
 		model: 'gemini-1.5-flash',
 		generationConfig: { temperature: 0 }
@@ -212,20 +212,45 @@ ${JSON.stringify(CIS_courses)}
 		await tick();
 		container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
 	}
+	let showLeftBar = false;
+
+	function toggleLeftBar() {
+		showLeftBar = !showLeftBar;
+	}
 </script>
 
 <div class="flex h-full relative top-0">
+	<button
+		class="absolute top-4 left-4 z-50 bg-leftBar dark:bg-black p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+		on:click={toggleLeftBar}
+	>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke-width="1.5"
+			stroke="currentColor"
+			class="size-6 text-bradley dark:text-white"
+		>
+			<path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
+			/>
+		</svg>
+	</button>
 	<div
-		class="bg-leftBar top-0 sticky dark:bg-black rounded-l-xl border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px] h-full w-1/6"
+		class="bg-leftBar top-0 absolute z-40 dark:bg-black rounded-l-xl border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px] h-full w-1/6 transition-transform duration-300 ease-in-out"
+		class:translate-x-0={showLeftBar}
+		class:-translate-x-[100%]={!showLeftBar}
 	>
 		<LeftBar />
 	</div>
-
-	<div class="w-5/6 flex flex-col h-full">
+	<div class="w-full flex flex-col h-full">
 		<UpperBar bind:title />
 		<div class="flex h-full overflow-hidden">
 			<div
-				class="w-[77%] overflow-auto bar h-full border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px]"
+				class="w-[84%] overflow-auto bar h-full border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px]"
 			>
 				<div
 					class={`flex flex-col ${chatHistory.length == 0 ? 'items-center justify-center' : ''} w-full relative h-full`}
@@ -248,7 +273,7 @@ ${JSON.stringify(CIS_courses)}
 									/>
 								</svg>
 								<p
-									class="font-calm title-animation transition-all ease-in-and-out duration-300 cursor text-purple dark:text-text text-4xl w-fit"
+									class="font-calm title-animation transition-all ease-in-and-out duration-300 cursor text-purple dark:text-lightpurple text-4xl w-fit"
 								>
 									Hey, how can I help you? &nbsp;
 								</p>
@@ -259,7 +284,7 @@ ${JSON.stringify(CIS_courses)}
 										on:click={() => {
 											selection = 'plan';
 										}}
-										class="flex gap-3 w-fit items-center text-center font-base dark:text-text hover:dark:text-white border-purple border-[1px] px-6 text-xl rounded-2xl py-2 hover:bg-purple hover:text-white cursor-pointer"
+										class="flex gap-3 w-fit items-center text-center font-base dark:text-lightpurple hover:dark:text-white border-purple border-[1px] px-6 text-xl rounded-2xl py-2 hover:bg-purple hover:text-white cursor-pointer"
 									>
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
@@ -282,7 +307,7 @@ ${JSON.stringify(CIS_courses)}
 										on:click={() => {
 											selection = 'qa';
 										}}
-										class="flex gap-3 w-fit items-center text-center font-base border-purple dark:text-text hover:dark:text-white border-[1px] px-6 text-xl rounded-2xl py-2 hover:bg-purple hover:text-white cursor-pointer"
+										class="flex gap-3 w-fit items-center text-center font-base border-purple dark:text-lightpurple hover:dark:text-white border-[1px] px-6 text-xl rounded-2xl py-2 hover:bg-purple hover:text-white cursor-pointer"
 									>
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
@@ -385,6 +410,33 @@ ${JSON.stringify(CIS_courses)}
 							{/each}
 						</div>
 					{/if}
+					{#if selection}
+						<div class="flex w-full gap-3 justify-center mb-4">
+							<button
+								on:click={() => {
+									selection = null;
+									chatHistory = [];
+								}}
+								class="flex gap-2 items-center text-center font-base dark:text-lightpurple hover:dark:text-white border-purple border-[1px] px-4 text-lg rounded-xl py-1.5 hover:bg-purple hover:text-white cursor-pointer"
+							>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor"
+									class="size-5"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
+									/>
+								</svg>
+								Back to Selection
+							</button>
+						</div>
+					{/if}
 					{#if selection == 'qa'}
 						<div
 							class="flex gap-2 absolute w-full ai-input justify-center px-10"
@@ -457,10 +509,134 @@ ${JSON.stringify(CIS_courses)}
 					{/if}
 				</div>
 			</div>
-			<div class="p-2 w-[23%]">
-				<p class="text-text font-calm text-lg text-center">
-					Here are some suggestions to get the best out of the Bradley Academic Helper.
-				</p>
+			<div class="p-2 w-[16%]">
+				<div class="space-y-6">
+					<p class="text-text font-calm text-lg text-center">
+						Here are some suggestions to get the best out of the Bradley Academic AI Helper.
+					</p>
+
+					<div class="space-y-4">
+						{#if selection === 'plan'}
+							<div class="bg-leftBar dark:bg-darkLeftBar p-4 rounded-xl space-y-3">
+								<div class="flex items-center gap-2">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke-width="1.5"
+										stroke="currentColor"
+										class="size-5 text-purple fill-purple"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
+										/>
+									</svg>
+									<h3 class="font-calm text-text text-lg">Academic Planning Tips:</h3>
+								</div>
+								<ul class="space-y-2 text-sm">
+									<li class="flex items-start gap-2">
+										<span class="font-base dark:text-text"
+											>Mention your career goals and interests</span
+										>
+									</li>
+									<li class="flex items-start gap-2">
+										<span class="font-base dark:text-text"
+											>Specify any concentration preferences</span
+										>
+									</li>
+									<li class="flex items-start gap-2">
+										<span class="font-base dark:text-text"
+											>Include any course preferences or restrictions</span
+										>
+									</li>
+								</ul>
+							</div>
+
+							<div class="bg-leftBar dark:bg-darkLeftBar p-4 rounded-xl space-y-3">
+								<div class="flex items-center gap-2">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke-width="1.5"
+										stroke="currentColor"
+										class="size-5 text-purple fill-purple"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
+										/>
+									</svg>
+									<h3 class="font-calm text-text text-lg">Sample Prompts:</h3>
+								</div>
+								<ul class="space-y-2 text-sm">
+									<li class="flex items-start gap-2">
+										<span class="font-base dark:text-text"
+											>"I want to focus on AI and Machine Learning"</span
+										>
+									</li>
+									<li class="flex items-start gap-2">
+										<span class="font-base dark:text-text"
+											>"I prefer to complete my core courses as soon as possible"</span
+										>
+									</li>
+								</ul>
+							</div>
+						{:else if selection === 'qa'}
+							<div class="bg-leftBar dark:bg-darkLeftBar p-4 rounded-xl space-y-3">
+								<div class="flex items-center gap-2">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke-width="1.5"
+										stroke="currentColor"
+										class="size-5 text-purple fill-purple"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
+										/>
+									</svg>
+									<h3 class="font-calm text-text text-lg">Ask About:</h3>
+								</div>
+								<ul class="space-y-2 text-sm">
+									<li class="flex items-start gap-2">
+										<span class="font-base dark:text-text"
+											>Course prerequisites and requirements</span
+										>
+									</li>
+									<li class="flex items-start gap-2">
+										<span class="font-base dark:text-text"
+											>Faculty teaching styles and expertise</span
+										>
+									</li>
+									<li class="flex items-start gap-2">
+										<span class="font-base dark:text-text">Course availability and scheduling</span>
+									</li>
+								</ul>
+							</div>
+
+							<div class="bg-leftBar dark:bg-darkLeftBar p-4 rounded-xl space-y-3">
+								<h3 class="font-calm text-text text-lg">Sample Questions:</h3>
+								<ul class="space-y-2 text-sm">
+									<li class="flex items-start gap-2">
+										<span class="font-base dark:text-text"
+											>"What are the prerequisites for CS 590?"</span
+										>
+									</li>
+									<li class="flex items-start gap-2">
+										<span class="font-base dark:text-text">"Who teaches Database Systems?"</span>
+									</li>
+								</ul>
+							</div>
+						{/if}
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

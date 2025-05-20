@@ -7,9 +7,9 @@
 	let url = currentUrl.split('/')[3];
 </script>
 
-<div class="flex flex-col gap-10 px-4 py-10 h-full sticky">
+<div class="flex flex-col gap-10 px-4 py-20 h-full sticky">
 	<div class="flex items-center gap-2 w-full justify-center">
-		<img src="../bu.png" class="h-10 w-10" alt="" srcset="" />
+		<img src="../bu.svg" class="h-10 w-10" alt="" srcset="" />
 		<p class="font-calm dark:text-white text-2xl">BU Planner</p>
 	</div>
 	<div class="font-calm text-lg group gap-3 flex flex-col items-center text-text">

@@ -1,4 +1,6 @@
 <script>
+	import { Toaster, toast } from 'svelte-french-toast';
+
 	let darkMode = true;
 
 	function handleSwitchDarkMode() {
@@ -9,21 +11,29 @@
 			: document.documentElement.classList.remove('dark');
 	}
 
-	export let title, main;
+	export let title = '';
+
+	async function handleShare() {
+		const url = 'https://academic-planner-tau.vercel.app/';
+		try {
+			await navigator.clipboard.writeText(url);
+			toast.success('Link copied to clipboard!');
+		} catch (err) {
+			toast.error('Failed to copy link');
+		}
+	}
 </script>
+
+<Toaster />
 
 <div
 	class="dark:border-b-darkBorder border-b-lightBorder border-r-0 border-l-0 border-t-0 border-[1px] w-full flex py-4 px-4"
 >
-	<div class="w-5/6 flex flex-col justify-center items-center">
+	<div class="w-full flex flex-col justify-center items-center">
 		<p class="font-calm text-4xl text-bradley">{title}</p>
-		{#if main}
-			<p class="dark:text-white text-dark font-base bg-transparent">
-				Your one stop destination to <i class="text-blue font-bold">carve</i> out your academic path
-			</p>
-		{/if}
+
 	</div>
-	<div class="w-1/6 flex justify-around items-center">
+	<div class="w-1/6 absolute right-0 flex justify-around items-center">
 		<button
 			on:click={() => {
 				handleSwitchDarkMode();
@@ -61,6 +71,7 @@
 		</button>
 
 		<button
+			on:click={handleShare}
 			class="flex items-center dark:hover:bg-blue hover:bg-blue group text-text gap-2 dark:bg-darkLeftBar bg-leftBar rounded-lg font-calm px-3 py-1"
 		>
 			<p class="group-hover:text-black">Share</p>

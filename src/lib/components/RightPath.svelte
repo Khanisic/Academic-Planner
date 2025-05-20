@@ -11,7 +11,7 @@
 	export let selectingSecondConcentration;
 </script>
 
-<div class="group flex flex-col gap-2 px-2 pb-3">
+<div class="group flex flex-col items-center gap-2 px-2 pb-3">
 	{#if step >= 7}
 		<p class="font-base text-text">
 			Drag and drop the courses in the respective semesters to know the probability of getting that
@@ -19,21 +19,8 @@
 		</p>
 
 		<p class="flex flex-wrap mt-3 gap-2 font-base text-text">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke-width="2.5"
-				stroke="currentColor"
-				class={`size-5 text-bold cursor-pointer dark:text-white text-bradley`}
-			>
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
-				/>
-			</svg> Use to lock a semester, by doing this the overall probability will not change as it indicated
-			that you have already taken that course and are finished with that semester
+			Use 🔒 to lock a semester, by doing this the overall probability will not change as it
+			indicated that you have already taken that course and are finished with that semester
 		</p>
 		<div
 			class="text-text w-[220px] justify-center items-center border-lightBorder dark:hover:text-bradley dark:hover:border-bradley hover:text-blue hover:border-blue dark:border-darkBorder border-[1px] flex flex-col gap-2 font-calm bg-leftBar dark:bg-darkLeftBar px-3 py-2 rounded-2xl"

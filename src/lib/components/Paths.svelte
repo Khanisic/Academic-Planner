@@ -3,6 +3,10 @@
 	import VerticalList from './VerticalList.svelte';
 	import toast from 'svelte-french-toast';
 	export let step, finalCourses, allProfessors, selectedProfessors, currProbability, selectedIntake;
+	export let selectedCoreCourses = {};
+	export let selectedConc1Courses = {};
+	export let selectedConc2Courses = {};
+	export let selectedElective = [];
 	let generatedData = [];
 
 	let semesters = [];
@@ -50,6 +54,21 @@
 		});
 	}
 
+	// Function to get course type
+	function getCourseType(course) {
+		const courseKey = `${course.course_details.course_dept.split(' ')[0]} ${course.course_details.course_code} : ${course.course_details.course_title}`;
+		if (selectedCoreCourses[courseKey]) {
+			return 'core';
+		} else if (selectedConc1Courses[courseKey]) {
+			return 'concentration1';
+		} else if (selectedConc2Courses[courseKey]) {
+			return 'concentration2';
+		} else if (selectedElective.includes(courseKey)) {
+			return 'elective';
+		}
+		return 'unknown';
+	}
+
 	onMount(async () => {
 		try {
 			// Make the API call to /api/generate
@@ -66,10 +85,14 @@
 				throw new Error(errorData.error || 'Failed to generate course data');
 			}
 
-		
 			let res = await response.json();
 
-			generatedData = res.courseData;
+			// Add type information to each course
+			generatedData = res.courseData.map(course => ({
+				...course,
+				type: getCourseType(course)
+			}));
+
 			availableCourses = [...generatedData]; // Initialize available courses
 			allProfessors = res.allProfessors;
 			selectedProfessors = [...allProfessors];
@@ -207,7 +230,7 @@
 		</div>
 		<button
 			on:click={resetCourses}
-			class="flex items-center gap-2 px-4 py-2 rounded-lg bg-bradley text-white hover:bg-white dark:bg-darkInner hover:text-bradley dark:hover:bg-darkBg dark:hover:text-white transition-colors duration-200"
+			class="flex items-center gap-2 px-4 py-1 rounded-lg bg-bradley text-white hover:bg-white dark:bg-darkInner hover:text-bradley dark:hover:bg-darkBg dark:hover:text-white transition-colors duration-200"
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -226,6 +249,27 @@
 			<p class="font-base">Reset Courses</p>
 		</button>
 	</div>
+
+	<!-- Course Type Legend -->
+	<div class="flex flex-wrap gap-3 mt-2 mb-4">
+		<div class="flex items-center gap-2">
+			<div class="w-4 h-4 rounded-full bg-bradley dark:bg-bradley border-bradley border-[1px]"></div>
+			<p class="font-base text-dark dark:text-white">Core Courses</p>
+		</div>
+		<div class="flex items-center gap-2">
+			<div class="w-4 h-4 rounded-full bg-purple dark:bg-lightpurple border-purple border-[1px]"></div>
+			<p class="font-base text-dark dark:text-white">Concentration 1</p>
+		</div>
+		<div class="flex items-center gap-2">
+			<div class="w-4 h-4 rounded-full bg-blue dark:bg-blue border-blue border-[1px]"></div>
+			<p class="font-base text-dark dark:text-white">Concentration 2</p>
+		</div>
+		<div class="flex items-center gap-2">
+			<div class="w-4 h-4 rounded-full bg-yellow dark:bg-yellow border-yellow border-[1px]"></div>
+			<p class="font-base text-dark dark:text-white">Electives</p>
+		</div>
+	</div>
+
 	{#if generatedData.length > 0 && semesters.length > 0}
 		<div class="flex gap-4">
 			<div class="w-1/2">

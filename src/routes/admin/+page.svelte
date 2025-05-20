@@ -26,6 +26,12 @@
 	const setSelection = (selected) => {
 		selection = selected;
 	};
+
+	let showLeftBar = false;
+
+	function toggleLeftBar() {
+		showLeftBar = !showLeftBar;
+	}
 </script>
 
 {#if openAddCourseModal}
@@ -44,17 +50,37 @@
 	<AddSemester bind:openSemesterModal />
 {/if}
 <div class="flex h-full relative top-0">
+	<button
+		class="absolute top-4 left-4 z-50 bg-leftBar dark:bg-black p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+		on:click={toggleLeftBar}
+	>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke-width="1.5"
+			stroke="currentColor"
+			class="size-6 text-bradley dark:text-white"
+		>
+			<path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
+			/>
+		</svg>
+	</button>
 	<div
-		class="bg-leftBar top-0 sticky dark:bg-black rounded-l-xl border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px] h-full w-1/6"
+		class="bg-leftBar top-0 absolute z-40 dark:bg-black rounded-l-xl border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px] h-full w-1/6 transition-transform duration-300 ease-in-out"
+		class:translate-x-0={showLeftBar}
+		class:-translate-x-[100%]={!showLeftBar}
 	>
 		<LeftBar />
 	</div>
-
-	<div class="w-5/6 flex flex-col h-full relative">
+	<div class="w-full flex flex-col h-full relative">
 		<UpperBar bind:title />
 		<div class="flex h-full overflow-hidden">
 			<div
-				class="w-[77%] h-full border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px]"
+				class="w-[84%] h-full border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px]"
 			>
 				<div
 					class="border-b-lightBorder dark:border-b-darkBorder border-r-0 border-l-0 border-t-0 border-[1px] py-3 font-calm text-text px-4 flex justify-around items-center text-xl"
@@ -235,7 +261,7 @@
 					{/if}
 				</div>
 			</div>
-			<div class="w-[23%] flex flex-col gap-3 px-2 pt-3 items-center relative overflow-y-auto bar">
+			<div class="w-[14%] flex flex-col gap-3 px-2 pt-3 items-center relative overflow-y-auto bar">
 				<div
 					class="border-b-lightBorder group dark:border-b-darkBorder border-r-0 border-l-0 border-t-0 border-[1px] flex flex-col gap-2 px-2 pb-3 text-center items-center"
 				>

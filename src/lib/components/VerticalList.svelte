@@ -2,7 +2,7 @@
 	import { flip } from 'svelte/animate';
 	import { dndzone } from 'svelte-dnd-action';
 	import { createEventDispatcher } from 'svelte';
-	
+
 	export let items;
 	export let semSelection;
 	export let calculateTotalProb;
@@ -11,6 +11,23 @@
 
 	const dispatch = createEventDispatcher();
 	const flipDurationMs = 300;
+
+	// Function to get the appropriate color class based on course type
+	function getTypeColorClass(type) {
+		console.log(type);
+		switch (type) {
+			case 'core':
+				return 'bg-white dark:bg-darkInner text-bradley border-bradley border-[1px] dark:hover:border-bradley dark:hover:bg-bradley dark:hover:text-white hover:bg-bradley hover:text-white hover:border-white'; // Blue
+			case 'concentration1':
+				return 'bg-white dark:border-lightpurple dark:text-lightpurple dark:bg-darkInner text-purple border-purple border-[1px] dark:hover:border-purple dark:hover:bg-purple dark:hover:text-white hover:bg-purple hover:text-white hover:border-white'; // Green
+			case 'concentration2':
+				return 'bg-white dark:border-skyblue dark:text-skyblue dark:bg-darkInner text-blue border-blue border-[1px] dark:hover:border-blue dark:hover:bg-blue dark:hover:text-white hover:bg-blue hover:text-white hover:border-white'; // Green
+			case 'elective':
+				return 'bg-white dark:border-yellow dark:text-yellow dark:bg-darkInner text-yellow border-yellow border-[1px] dark:hover:border-yellow dark:hover:bg-yellow dark:hover:text-white hover:bg-yellow hover:text-white hover:border-white'; // Green
+			default:
+				return 'bg-gray dark:bg-lightGray'; // Gray
+		}
+	}
 
 	function handleDndConsider(e) {
 		items = e.detail.items;
@@ -66,16 +83,16 @@
 	{#each items as item (item.id)}
 		<div animate:flip={{ duration: flipDurationMs }} class="border-none outline-none">
 			<div
-				class={`text-text group outline-none relative text-center w-fit justify-center items-center border-lightBorder dark:hover:text-bradley dark:hover:border-bradley hover:text-black hover:border-black dark:border-darkBorder border-[1px] flex gap-2 font-calm bg-leftBar dark:bg-darkLeftBar px-3 py-1   ${lockedSemesters[semester] ? 'cursor-not-allowed' : ''}  rounded-2xl`}
+				class={` group outline-none relative text-center w-fit justify-center items-center  flex gap-2 font-calm ${getTypeColorClass(item.type)} px-3 py-1 ${lockedSemesters[semester] ? 'cursor-not-allowed' : ''} rounded-2xl`}
 			>
 				<p class="font-base">
 					{item.course_details.course_dept.split(' ')[0]}
 					{item.course_details.course_code}
-					{item.course_details.course_title.slice(0, 30)}
+					{item.course_details.course_title.slice(0, 40)}
 				</p>
 
 				{#if semSelection && !lockedSemesters[semester]}
-					<p class="font-base">
+					<p class="font-calm text-dark dark:text-white">
 						{getAvailability(item) * 100}%
 					</p>
 
@@ -89,7 +106,7 @@
 								viewBox="0 0 24 24"
 								stroke-width="1.5"
 								stroke="currentColor"
-								class=" text-white min-w-6 h-6"
+								class="text-white min-w-6 h-6"
 							>
 								<path
 									stroke-linecap="round"
