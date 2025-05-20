@@ -6,7 +6,7 @@
 		hoursConc2,
 		addConc2Course,
 		selectedConc2Courses,
-		concentration1Details, program;
+		concentration1Details, program, selectedCoreCourses;
 </script>
 
 <div class="flex gap-5 items-start bg-transparent">
@@ -47,22 +47,26 @@
 			Required Courses - {hoursConc2} hours
 		</p>
 		{#each concentration2Details.concentration_required_courses as courses, index}
-			<button
-				class={`bg-purple text-white  border-lightpurple max-w-[350px] shadow-md font-base hover:bg-purple rounded-lg px-3 cursor-pointer `}
-				>{courses.course_dept.split(" ")[0]} {courses.course_code} {courses.course_title}</button
-			>
+			{#if !selectedCoreCourses[`${courses.course_dept.split(" ")[0]} ${courses.course_code} : ${courses.course_title}`]}
+				<button
+					class={`bg-purple text-white  border-lightpurple max-w-[350px] shadow-md font-base hover:bg-purple rounded-lg px-3 cursor-pointer `}
+					>{courses.course_dept.split(" ")[0]} {courses.course_code} {courses.course_title}</button
+				>
+			{/if}
 		{/each}
 
 		{#if concentration2Details.concentration_elective_courses}
 			<p class="dark:text-purple text-dark font-calm text-lg bg-transparent">Electives</p>
 			{#each concentration2Details.concentration_elective_courses as courses, index}
-				<button
-					on:click={() => {
-						addConc2Course(`${courses.course_dept.split(" ")[0]} ${courses.course_code} : ${courses.course_title}`, hoursConc2);
-					}}
-					class={`${selectedConc2Courses[`${courses.course_dept.split(" ")[0]} ${courses.course_code} : ${courses.course_title}`] == true ? 'bg-purple text-white' : 'bg-lightpurple'} text-ellipsis whitespace-nowrap h-6 max-w-[350px] shadow-md font-base hover:bg-purple hover:text-white rounded-lg px-3 cursor-pointer `}
-					>{courses.course_dept.split(" ")[0]} {courses.course_code} {courses.course_title}</button
-				>
+				{#if !selectedCoreCourses[`${courses.course_dept.split(" ")[0]} ${courses.course_code} : ${courses.course_title}`]}
+					<button
+						on:click={() => {
+							addConc2Course(`${courses.course_dept.split(" ")[0]} ${courses.course_code} : ${courses.course_title}`, hoursConc2);
+						}}
+						class={`${selectedConc2Courses[`${courses.course_dept.split(" ")[0]} ${courses.course_code} : ${courses.course_title}`] == true ? 'bg-purple text-white' : 'bg-lightpurple'} text-ellipsis whitespace-nowrap h-6 max-w-[350px] shadow-md font-base hover:bg-purple hover:text-white rounded-lg px-3 cursor-pointer `}
+						>{courses.course_dept.split(" ")[0]} {courses.course_code} {courses.course_title}</button
+					>
+				{/if}
 			{/each}
 		{/if}
 	</div>

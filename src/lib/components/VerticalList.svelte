@@ -7,6 +7,7 @@
 	export let semSelection;
 	export let calculateTotalProb;
 	export let semester; // New prop to identify which semester this list represents
+	export let lockedSemesters = {}; // Add prop for locked semesters
 
 	const dispatch = createEventDispatcher();
 	const flipDurationMs = 300;
@@ -57,7 +58,7 @@
 	>
 	-->
 <section
-	class="w-full flex min-h-[120px] min-w-[200px] flex-col gap-2 outline-none p-2 border-lightBorder dark:border-darkBorder rounded-xl border-[1px]"
+	class={`w-full flex min-h-[120px] min-w-[200px] flex-col gap-2 outline-none p-2 border-lightBorder dark:border-darkBorder rounded-xl border-[1px] ${lockedSemesters[semester] ? ' bg-bradley cursor-not-allowed' : ''}`}
 	use:dndzone={{ items, flipDurationMs }}
 	on:consider={handleDndConsider}
 	on:finalize={handleDndFinalize}
@@ -65,15 +66,15 @@
 	{#each items as item (item.id)}
 		<div animate:flip={{ duration: flipDurationMs }} class="border-none outline-none">
 			<div
-				class="text-text group outline-none relative text-center w-fit justify-center items-center border-lightBorder dark:hover:text-bradley dark:hover:border-bradley hover:text-black hover:border-black dark:border-darkBorder border-[1px] flex gap-2 font-calm bg-leftBar dark:bg-darkLeftBar px-3 py-1 rounded-2xl"
+				class={`text-text group outline-none relative text-center w-fit justify-center items-center border-lightBorder dark:hover:text-bradley dark:hover:border-bradley hover:text-black hover:border-black dark:border-darkBorder border-[1px] flex gap-2 font-calm bg-leftBar dark:bg-darkLeftBar px-3 py-1   ${lockedSemesters[semester] ? 'cursor-not-allowed' : ''}  rounded-2xl`}
 			>
 				<p class="font-base">
 					{item.course_details.course_dept.split(' ')[0]}
 					{item.course_details.course_code}
-					{item.course_details.course_title}
+					{item.course_details.course_title.slice(0, 30)}
 				</p>
 
-				{#if semSelection}
+				{#if semSelection && !lockedSemesters[semester]}
 					<p class="font-base">
 						{getAvailability(item) * 100}%
 					</p>
@@ -101,9 +102,9 @@
 							class="text-white transition-all duration-[4000ms] ease-in-out hover:-translate-x-[100%] whitespace-nowrap"
 						>
 							<span class="text-white">Professors: </span>
-							{isThereAProf(getProfessors(item)[0]?.faculty, 1)}
-							{isThereAProf(getProfessors(item)[1]?.faculty)}
-							{isThereAProf(getProfessors(item)[2]?.faculty)}
+							{isThereAProf(getProfessors(item)[0]?.active ? getProfessors(item)[0]?.faculty : '')}
+							{isThereAProf(getProfessors(item)[1]?.active ? getProfessors(item)[1]?.faculty : '')}
+							{isThereAProf(getProfessors(item)[2]?.active ? getProfessors(item)[2]?.faculty : '')}
 						</p>
 					</div>
 				{/if}

@@ -69,7 +69,7 @@ export async function PUT({ request }) {
         }
 
         // Map current course offerings in the semester
-        const existingOfferingIds = new Set(existingSemester.course_offerings.map(offering => offering._id.toString()));
+        //const existingOfferingIds = new Set(existingSemester.course_offerings.map(offering => offering._id.toString()));
 
         // Separate offerings into those to keep, add, and delete
         const newOfferings = [];

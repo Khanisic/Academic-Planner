@@ -11,6 +11,7 @@
 	import toast, { Toaster } from 'svelte-french-toast';
 	import LeftBar from '../../../lib/components/LeftBar.svelte';
 	import UpperBar from '../../../lib/components/UpperBar.svelte';
+	import RightPath from '../../../lib/components/RightPath.svelte';
 	export let data;
 	const { program } = data;
 
@@ -199,12 +200,16 @@
 			(concen) => concen.concentration_name == con
 		)[0];
 		for (let i = 0; i < concentration1Details.concentration_required_courses.length; i++) {
-			selectedConc1Courses[
-				`${concentration1Details.concentration_required_courses[i].course_dept.split(' ')[0]} ${concentration1Details.concentration_required_courses[i].course_code} : ${concentration1Details.concentration_required_courses[i].course_title}`
-			] = true;
+			const courseKey = `${concentration1Details.concentration_required_courses[i].course_dept.split(' ')[0]} ${concentration1Details.concentration_required_courses[i].course_code} : ${concentration1Details.concentration_required_courses[i].course_title}`;
+			// Only add if not already in core courses
+			if (!selectedCoreCourses[courseKey]) {
+				selectedConc1Courses[courseKey] = true;
+			}
 		}
 		hoursConc1 = concentration1Details.concentration_required_courses.reduce((total, course) => {
-			return total + course.course_credit_hours;
+			const courseKey = `${course.course_dept.split(' ')[0]} ${course.course_code} : ${course.course_title}`;
+			// Only count hours if course is not in core courses
+			return total + (!selectedCoreCourses[courseKey] ? course.course_credit_hours : 0);
 		}, 0);
 		totalHours = hoursConc1;
 		if (totalHours == 9) {
@@ -222,12 +227,16 @@
 			(concen) => concen.concentration_name == con
 		)[0];
 		for (let i = 0; i < concentration2Details.concentration_required_courses.length; i++) {
-			selectedConc2Courses[
-				`${concentration2Details.concentration_required_courses[i].course_dept.split(' ')[0]} ${concentration2Details.concentration_required_courses[i].course_code} : ${concentration2Details.concentration_required_courses[i].course_title}`
-			] = true;
+			const courseKey = `${concentration2Details.concentration_required_courses[i].course_dept.split(' ')[0]} ${concentration2Details.concentration_required_courses[i].course_code} : ${concentration2Details.concentration_required_courses[i].course_title}`;
+			// Only add if not already in core courses
+			if (!selectedCoreCourses[courseKey]) {
+				selectedConc2Courses[courseKey] = true;
+			}
 		}
 		hoursConc2 = concentration2Details.concentration_required_courses.reduce((total, course) => {
-			return total + course.course_credit_hours;
+			const courseKey = `${course.course_dept.split(' ')[0]} ${course.course_code} : ${course.course_title}`;
+			// Only count hours if course is not in core courses
+			return total + (!selectedCoreCourses[courseKey] ? course.course_credit_hours : 0);
 		}, 0);
 		totalHours = hoursConc2;
 		if (totalHours == 9) {
@@ -339,6 +348,7 @@
 							bind:selectedConc1Courses
 							{addConc1Course}
 							{program}
+							{selectedCoreCourses}
 						/>{/if}
 
 					{#if (step >= 4 && step < 7 && selectingSecondConcentration) || (step <= -5 && selectingSecondConcentration)}<Conc2
@@ -350,6 +360,7 @@
 							bind:concentration1Details
 							{addConc2Course}
 							{program}
+							{selectedCoreCourses}
 						/>{/if}
 
 					{#if (step >= 5 && step < 7) || step <= -6}<Electives
@@ -372,6 +383,10 @@
 							bind:finalCourses
 							bind:step
 							selectedIntake={selectedIntake}
+							{selectedCoreCourses}
+							{selectedConc1Courses}
+							{selectedConc2Courses}
+							{selectedElective}
 						/>{/if}
 
 					{#if step < 0}
@@ -401,134 +416,20 @@
 			<div
 				class="w-[23%] top-0 sticky flex flex-col gap-3 px-2 pt-3 items-center overflow-y-auto bar"
 			>
-				<div class=" group flex flex-col gap-2 px-2 pb-3">
-					{#if step >= 7}
-						<p class="font-base text-text">
-							Drag and drop the courses in the respective semesters to know the probability of
-							getting that course for that semester, additionally apply filters to get the best
-							outcome.
-						</p>
-
-						<div
-							class="text-text w-[220px] justify-center items-center border-lightBorder dark:hover:text-bradley dark:hover:border-bradley hover:text-blue hover:border-blue dark:border-darkBorder border-[1px] flex flex-col gap-2 font-calm bg-leftBar dark:bg-darkLeftBar px-3 py-2 rounded-2xl"
-						>
-							<p class="font-calm text-xl text-center text-black dark:text-white">
-								Probability of Current Path:
-							</p>
-							<p class="text-xl">{currProbability.toFixed(2)} %</p>
-						</div>
-
-						<div class="flex flex-col px-4 py-2">
-							<button
-								on:click={() => {
-									showFilters = !showFilters;
-								}}
-								class="flex mb-2 items-center gap-2 justify-between text-blue cursor-pointer"
-							>
-								<div class="flex gap-2">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke-width="1.5"
-										stroke="currentColor"
-										class="size-6"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
-										/>
-									</svg>
-									<p class="font-base text-blue">Filters</p>
-								</div>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke-width="1.5"
-									stroke="currentColor"
-									class={`size-5 self-end transition-all ease-in-out duration-150 ${showFilters ? 'rotate-0' : 'rotate-180'}`}
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										d="m19.5 8.25-7.5 7.5-7.5-7.5"
-									/>
-								</svg>
-							</button>
-
-							{#if showFilters && allProfessors.length > 0}
-								{#each allProfessors as professor}
-									<div class="flex gap-2">
-										<input
-											type="checkbox"
-											bind:group={selectedProfessors}
-											value={professor}
-											id={professor}
-											checked
-											class="accent-bradley"
-										/>
-										<label for={professor} class="font-base text-text">{professor}</label>
-									</div>
-								{/each}
-							{/if}
-						</div>
-					{:else if Object.keys(selectedCoreCourses).length > 0}
-						<div class="flex flex-col items-center gap-2">
-							{#each Object.keys(selectedCoreCourses) as courses, index}
-								<div
-									class="text-text w-[220px] justify-center items-center border-lightBorder dark:hover:text-green dark:hover:border-green hover:text-black hover:border-black dark:border-darkBorder border-[1px] flex gap-2 font-calm bg-leftBar dark:bg-darkLeftBar px-3 py-1 rounded-2xl"
-								>
-									<p class="font-calm">{index + 1}:</p>
-									<p class="font-calm text-center overflow-hidden">{courses.slice(0, 20)}</p>
-								</div>
-							{/each}
-
-							<div
-								class="border-b-lightBorder w-1/2 mb-3 group dark:border-b-darkBorder border-r-0 border-l-0 border-t-0 border-[1px] flex flex-col gap-2 px-2 pb-3 text-center items-center"
-							></div>
-
-							{#if Object.keys(selectedConc1Courses).length > 0}
-								{#each Object.keys(selectedConc1Courses) as courses, index}
-									<div
-										class="text-text w-[220px] justify-center items-center border-lightBorder dark:hover:text-blue dark:hover:border-blue hover:text-black hover:border-black dark:border-darkBorder border-[1px] flex gap-2 font-calm bg-leftBar dark:bg-darkLeftBar px-3 py-1 rounded-2xl"
-									>
-										<p class="font-calm">{index + 5}:</p>
-										<p class="font-calm text-center overflow-hidden">{courses.slice(0, 25)}</p>
-									</div>
-								{/each}
-							{/if}
-							<div
-								class="border-b-lightBorder w-1/2 mb-3 group dark:border-b-darkBorder border-r-0 border-l-0 border-t-0 border-[1px] flex flex-col gap-2 px-2 pb-3 text-center items-center"
-							></div>
-							{#if Object.keys(selectedConc2Courses).length > 0}
-								{#each Object.keys(selectedConc2Courses) as courses, index}
-									<div
-										class="text-text w-[220px] justify-center items-center border-lightBorder dark:hover:text-yellow dark:hover:border-yellow hover:text-black hover:border-black dark:border-darkBorder border-[1px] flex gap-2 font-calm bg-leftBar dark:bg-darkLeftBar px-3 py-1 rounded-2xl"
-									>
-										<p class="font-calm">{index + 5}:</p>
-										<p class="font-calm text-center overflow-hidden">{courses.slice(0, 25)}</p>
-									</div>
-								{/each}
-							{/if}
-							<div
-								class="border-b-lightBorder w-1/2 mb-3 group dark:border-b-darkBorder border-r-0 border-l-0 border-t-0 border-[1px] flex flex-col gap-2 px-2 pb-3 text-center items-center"
-							></div>
-
-							{#if selectedElective.length > 0}
-								{#each selectedElective as courses, index}
-									<div
-										class="text-text w-[220px] justify-center items-center border-lightBorder dark:hover:text-yellow dark:hover:border-yellow hover:text-black hover:border-black dark:border-darkBorder border-[1px] flex gap-2 font-calm bg-leftBar dark:bg-darkLeftBar px-3 py-1 rounded-2xl"
-									>
-										<p class="font-calm">{index + 5}:</p>
-										<p class="font-calm text-center overflow-hidden">{courses.slice(0, 25)}</p>
-									</div>
-								{/each}
-							{/if}
-						</div>
-					{/if}
-				</div>
+				<RightPath
+					bind:step
+					bind:currProbability
+					bind:showFilters
+					bind:allProfessors
+					bind:selectedProfessors
+					bind:selectedCoreCourses
+					bind:selectedConc1Courses
+					bind:selectedConc2Courses
+					bind:selectedElective
+					bind:selectingSecondConcentration
+					bind:concentration1Details
+					bind:concentration2Details
+				/>
 			</div>
 		</div>
 	</div>

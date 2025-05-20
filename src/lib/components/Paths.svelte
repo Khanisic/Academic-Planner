@@ -10,16 +10,22 @@
 	let semSelection = true;
 	let availableCourses = []; // New variable to track available courses
 
+	// Add state for tracking expanded semesters
+	let expandedSemesters = {};
+
+	// Add state for locked semesters
+	let lockedSemesters = {};
+
 	// Function to generate semesters based on selected intake
 	function generateSemesters(startIntake) {
 		const [season, year] = startIntake.split(' ');
 		const yearNum = parseInt(year);
 		const seasons = ['Spring', 'Fall'];
 		const startIndex = seasons.indexOf(season);
-		
+
 		semesters = [];
 		semesterData = {};
-		
+
 		// Generate 4 semesters starting from the selected intake
 		for (let i = 0; i < 4; i++) {
 			const currentSeason = seasons[(startIndex + i) % 2];
@@ -33,6 +39,15 @@
 	// Initialize semesters when selectedIntake changes
 	$: if (selectedIntake) {
 		generateSemesters(selectedIntake);
+	}
+
+	// Initialize expanded state for each semester
+	$: if (semesters) {
+		semesters.forEach((sem) => {
+			if (expandedSemesters[sem] === undefined) {
+				expandedSemesters[sem] = true; // Start with all semesters expanded
+			}
+		});
 	}
 
 	onMount(async () => {
@@ -51,77 +66,131 @@
 				throw new Error(errorData.error || 'Failed to generate course data');
 			}
 
-			// Parse the JSON response
+		
 			let res = await response.json();
 
 			generatedData = res.courseData;
 			availableCourses = [...generatedData]; // Initialize available courses
 			allProfessors = res.allProfessors;
 			selectedProfessors = [...allProfessors];
+
+			console.log(res);
 		} catch (error) {
 			console.error('Error fetching generated data:', error);
 		}
 	});
 
-	const calculateTotalProb = () => {
+	const calculateTotalProb = (reset) => {
 		if (reset) {
 			currProbability = 0;
 			return;
 		}
+
 		let totalProbability = 0;
 		let totalCourses = 0;
 
 		// Calculate probability for each semester
-		semesters.forEach(semester => {
+		semesters.forEach((semester) => {
 			const semesterCourses = semesterData[semester] || [];
-			const semesterTotal = semesterCourses.reduce((acc, course) => acc + course.fall_availability, 0);
+			const isFall = semester.toLowerCase().includes('fall');
+			const isLocked = lockedSemesters[semester];
+
+			// Calculate total probability for the semester
+			const semesterTotal = semesterCourses.reduce((acc, course) => {
+				// If semester is locked, count as 100% probability
+				const availability = isLocked ? 1 : (isFall ? course.fall_availability : course.spring_availability);
+				return acc + availability;
+			}, 0);
+
 			totalProbability += semesterTotal;
 			totalCourses += semesterCourses.length;
 		});
 
-		currProbability = (totalProbability * 100) / totalCourses;
+		// Calculate final probability, defaulting to 0 if no courses
+		currProbability = totalCourses > 0 ? (totalProbability * 100) / totalCourses : 0;
 	};
 
 	// Function to check if a semester has reached its course limit
 	function canAddCourse(semester) {
 		const semesterIndex = semesters.indexOf(semester);
 		// First 3 semesters have a limit of 3 courses
-		if (semesterIndex < 3) {
-			return (semesterData[semester]?.length || 0) < 3;
+		if (semesterIndex < 4) {
+			return (semesterData[semester]?.length || 0) < 4;
 		}
 		return true; // No limit for the last semester
 	}
 
-	// Function to handle course movement between semesters
 	function handleCourseMove(course, fromSemester, toSemester) {
 		if (!canAddCourse(toSemester)) {
 			toast.error('Maximum 3 courses allowed in the first 3 semesters');
 			return false;
 		}
 
-		if (fromSemester) {
-			semesterData[fromSemester] = semesterData[fromSemester].filter(c => c !== course);
-			availableCourses = [...availableCourses, course];
-		}
-		if (toSemester) {
-			semesterData[toSemester] = [...(semesterData[toSemester] || []), course];
-			availableCourses = availableCourses.filter(c => c !== course);
-		}
+		// if (fromSemester) {
+		// 	semesterData[fromSemester] = semesterData[fromSemester].filter(c => c !== course);
+		// 	availableCourses = [...availableCourses, course];
+		// }
+		// if (toSemester) {
+		// 	semesterData[toSemester] = [...(semesterData[toSemester] || []), course];
+		// 	availableCourses = availableCourses.filter(c => c !== course);
+		// }
 		calculateTotalProb();
+
 		return true;
 	}
 
 	// Function to reset all courses
 	function resetCourses() {
 		// Move all courses back to available courses
-		semesters.forEach(semester => {
+		availableCourses = [...generatedData];
+		semesters.forEach((semester) => {
 			if (semesterData[semester]) {
-				availableCourses = [...availableCourses, ...semesterData[semester]];
 				semesterData[semester] = [];
 			}
 		});
-		calculateTotalProb("reset");
+		calculateTotalProb('reset');
 	}
+
+	// Toggle function for semester expansion
+	const toggleSemester = (semester) => {
+		expandedSemesters[semester] = !expandedSemesters[semester];
+		expandedSemesters = expandedSemesters; // Trigger reactivity
+	};
+
+	// Function to reset courses for a specific semester
+	const resetSemesterCourses = (semester) => {
+		console.log('here');
+		console.log(semesterData[semester]);
+		if (semesterData[semester]) {
+			// Get the IDs of courses in the current semester
+			const currentSemesterCourseIds = semesterData[semester].map((course) => course.id);
+
+			// Clear the current semester
+			semesterData[semester] = [];
+
+			// Rebuild available courses from generatedData
+			// First, get all course IDs that are currently in any semester
+			const allSemesterCourseIds = Object.values(semesterData)
+				.flat()
+				.map((course) => course.id);
+
+			// Then, available courses are all courses from generatedData that are not in any semester
+			availableCourses = generatedData.filter(
+				(course) => !allSemesterCourseIds.includes(course.id)
+			);
+
+			// Force a UI update
+			semesterData = { ...semesterData };
+			calculateTotalProb();
+		}
+	};
+
+	// Function to toggle semester lock
+	const toggleSemesterLock = (semester) => {
+		lockedSemesters[semester] = !lockedSemesters[semester];
+		lockedSemesters = { ...lockedSemesters }; // Trigger reactivity
+		calculateTotalProb();
+	};
 </script>
 
 <div class="flex flex-col gap-2">
@@ -132,14 +201,27 @@
 			7.
 		</div>
 		<div class="flex flex-col gap-2 bg-transparent">
-			<p class="dark:text-lightpurple text-dark font-calm text-2xl bg-transparent">Create your path</p>
+			<p class="dark:text-lightpurple text-dark font-calm text-2xl bg-transparent">
+				Create your path
+			</p>
 		</div>
 		<button
 			on:click={resetCourses}
 			class="flex items-center gap-2 px-4 py-2 rounded-lg bg-bradley text-white hover:bg-white dark:bg-darkInner hover:text-bradley dark:hover:bg-darkBg dark:hover:text-white transition-colors duration-200"
 		>
-			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-				<path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke-width="1.5"
+				stroke="currentColor"
+				class="size-5"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+				/>
 			</svg>
 			<p class="font-base">Reset Courses</p>
 		</button>
@@ -153,16 +235,89 @@
 			<div class="w-1/2">
 				{#each semesters as semester}
 					<div>
-						<p class="font-calm text-black dark:text-white">{semester}:</p>
-						<VerticalList
-							{calculateTotalProb}
-							bind:semSelection
-							items={semesterData[semester] || []}
-							{semester}
-							on:courseMove={(e) => handleCourseMove(e.detail.course, e.detail.from, semester)}
-						/>
-						{#if semesters.indexOf(semester) < 3}
-							<p class="text-sm font-base text-gray-500">(Max 3 courses)</p>
+						<div class="flex justify-between items-center pr-4">
+							<button
+								on:click={() => toggleSemester(semester)}
+								class="flex gap-4 relative group transition-colors duration-200 border-darkBorder cursor-pointer border-b-0 w-fit my-1 px-2 rounded-lg items-center"
+							>
+								<p class="font-calm text-black group-hover:text-bradley dark:text-white">
+									{semester}:
+								</p>
+								<span
+									class=" dark:text-lightpurple text-purple font-calm bottom-2 -left-2 absolute text-sm px-2 py-0.5 rounded-full"
+								>
+									{semesterData[semester]?.length || ''}
+								</span>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor"
+									class={`size-4 group-hover:-translate-y-1 transition-all ease-in-out duration-200 group-hover:text-bradley dark:text-white ${expandedSemesters[semester] ? 'rotate-180' : ''}`}
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="m4.5 18.75 7.5-7.5 7.5 7.5"
+									/>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="m4.5 12.75 7.5-7.5 7.5 7.5"
+									/>
+								</svg>
+							</button>
+							<div class="flex gap-2">
+								<button 
+									on:click={() => toggleSemesterLock(semester)}
+									class="px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full"
+								>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke-width="1.5"
+										stroke="currentColor"
+										class={`size-4 cursor-pointer dark:text-white ${lockedSemesters[semester] ? 'text-bradley dark:text-bradley' : 'hover:text-bradley'}`}
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
+										/>
+									</svg>
+								</button>
+								<button
+									on:click={() => resetSemesterCourses(semester)}
+									class="px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full"
+								>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke-width="1.5"
+										stroke="currentColor"
+										class="size-4 hover:text-bradley dark:hover:text-bradley cursor-pointer dark:text-white"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
+										/>
+									</svg>
+								</button>
+							</div>
+						</div>
+						{#if expandedSemesters[semester]}
+							<VerticalList
+								{calculateTotalProb}
+								bind:semSelection
+								bind:items={semesterData[semester]}
+								{semester}
+								{lockedSemesters}
+								on:courseMove={(e) => handleCourseMove(e.detail.course, e.detail.from, semester)}
+							/>
 						{/if}
 					</div>
 				{/each}

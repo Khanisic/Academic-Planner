@@ -1,12 +1,18 @@
 <script>
 	import { csis } from '$lib/assets/mscs.js';
 	import toast, { Toaster } from 'svelte-french-toast';
-	export let allCourses, selectedElective, step, courses, finalAllCourses, selectingSecondConcentration;
+	export let allCourses,
+		selectedElective,
+		step,
+		courses,
+		finalAllCourses,
+		selectingSecondConcentration;
 
 	let searchQuery = '';
 
-	$: filteredCourses = courses.filter(course => {
-		const courseString = `${course.course_dept.split(' ')[0]} ${course.course_code} : ${course.course_title}`.toLowerCase();
+	$: filteredCourses = courses.filter((course) => {
+		const courseString =
+			`${course.course_dept.split(' ')[0]} ${course.course_code} : ${course.course_title}`.toLowerCase();
 		return courseString.includes(searchQuery.toLowerCase());
 	});
 
@@ -14,7 +20,7 @@
 		// Check if course is already selected
 		if (selectedElective.includes(course)) {
 			// Remove the course if it's already selected
-			selectedElective = selectedElective.filter(c => c !== course);
+			selectedElective = selectedElective.filter((c) => c !== course);
 			finalAllCourses = [...allCourses, ...selectedElective];
 			return;
 		}
@@ -31,21 +37,19 @@
 				return;
 			}
 		}
-		
+
 		selectedElective = [...selectedElective, course];
-		
+
 		finalAllCourses = [...allCourses, ...selectedElective];
 
 		if (finalAllCourses.length == 11) {
 			step = -6;
 		}
-		console.log(finalAllCourses)
-
-		
+		console.log(finalAllCourses);
 	};
 </script>
 
-<Toaster/>
+<Toaster />
 
 <div class="flex gap-5 items-center bg-transparent mt-1">
 	<div
@@ -58,13 +62,28 @@
 	</div>
 </div>
 
-<div class="mb-4">
+<div class="mb-4 w-fit px-4 font-base py-1 rounded-full border flex justify-between dark:border-darkBorder dark:bg-darkInner  border-lightpurple focus:outline-none focus:border-purple dark:text-white">
 	<input
 		type="text"
 		bind:value={searchQuery}
 		placeholder="Search electives..."
-		class="w-1/4 px-4 font-base py-2 rounded-full border border-lightpurple focus:outline-none focus:border-purple dark:bg-gray-800 dark:text-white"
+		class="font-base rounded-full dark:bg-darkInner text-dark outline-none dark:text-white"
 	/>
+
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		fill="none"
+		viewBox="0 0 24 24"
+		stroke-width="1.5"
+		stroke="currentColor"
+		class="size-6 stroke-lightpurple"
+	>
+		<path
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+		/>
+	</svg>
 </div>
 
 <div class="flex flex-wrap gap-2">

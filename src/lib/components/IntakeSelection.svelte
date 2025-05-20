@@ -3,7 +3,7 @@
 	export let selectedIntake = '';
 	export let step;
 
-	const intakes = ['Fall 25', 'Spring 25', 'Fall 24', 'Spring 24', 'Fall 23', 'Spring 23'];
+	const intakes = ['Fall 24', 'Spring 25', 'Fall 25', 'Spring 26'];
 
 	let openIntakeOptions = false;
 	let dropdownRef;
