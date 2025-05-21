@@ -41,7 +41,7 @@
 				{index + 1}.
 			</p>
 			<div class="flex gap-2 items-center leading-3">
-				<p class="font-calm m-0 group-hover:bg-skyblue px-2 rounded-lg text-lg">
+				<p class="font-calm m-0 dark:text-white dark:hover:bg-bradley group-hover:bg-skyblue px-2 rounded-lg text-lg">
 					{professor.name}
 				</p>
 				<svg
@@ -50,7 +50,7 @@
 					viewBox="0 0 24 24"
 					stroke-width="1.5"
 					stroke="currentColor"
-					class="size-4 hidden group-hover:block"
+					class="size-4 hidden group-hover:block dark:text-text"
 				>
 					<path
 						stroke-linecap="round"

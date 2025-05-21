@@ -65,7 +65,7 @@
 			viewBox="0 0 24 24"
 			stroke-width="1.5"
 			stroke="currentColor"
-			class="size-6 text-bradley dark:text-text dark:text-text dark:text-text"
+			class="size-6 text-bradley dark:text-text "
 		>
 			<path
 				stroke-linecap="round"
@@ -90,7 +90,7 @@
 				<div class="max-w-4xl mx-auto">
 					<div class="text-center mb-12">
 			
-						<p class="text-lg font-base text-text dark:text-text dark:text-text">
+						<p class="text-lg font-base text-text dark:text-text ">
 							Have questions or feedback? We'd love to hear from you.
 						</p>
 					</div>
@@ -115,7 +115,7 @@
 									</svg>
 									<h2 class="text-xl font-calm text-text">Email Us</h2>
 								</div>
-								<p class="text-text dark:text-text dark:text-text font-base">amkhan357@gmail.com</p>
+								<p class="text-text dark:text-text  font-base">amkhan357@gmail.com</p>
 							</div>
 
 						
@@ -141,7 +141,7 @@
 									<h2 class="text-xl font-calm text-text">Follow Us</h2>
 								</div>
 								<div class="flex gap-4">
-									<a href="#" class="text-text dark:text-text dark:text-text hover:text-blue transition-colors">
+									<a href="https://x.com/KXhakov" class="text-text  dark:text-text hover:text-blue transition-colors">
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
 											viewBox="0 0 24 24"
@@ -153,7 +153,7 @@
 											/>
 										</svg>
 									</a>
-									<a href="#" class="text-text dark:text-text dark:text-text hover:text-blue transition-colors">
+									<a href="#" class="text-text dark:text-text hover:text-blue transition-colors">
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
 											viewBox="0 0 24 24"
@@ -165,7 +165,7 @@
 											/>
 										</svg>
 									</a>
-									<a href="#" class="text-text dark:text-text dark:text-text hover:text-blue transition-colors">
+									<a href="#" class="text-text  dark:text-text hover:text-blue transition-colors">
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
 											viewBox="0 0 24 24"

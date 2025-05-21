@@ -240,6 +240,17 @@
 						/>
 						<label for="january" class="font-base">January Interim</label>
 					</div>
+					<div class="flex items-center gap-2">
+						<input
+							class="accent-dark w-3 h-3"
+							type="radio"
+							name="level"
+							id="summer"
+							value="Summer"
+							bind:group={season}
+						/>
+						<label for="summer" class="font-base">Summer</label>
+					</div>
 				</div>
 			</div>
 

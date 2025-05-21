@@ -31,6 +31,12 @@
 			<p class="text-xl">{currProbability.toFixed(2)} %</p>
 		</div>
 
+		<p class="flex flex-wrap mt-3 gap-2 font-base text-text">
+			Probability is calculated based on the courses that have been offered in the past 3 - 5 years in
+			those particular semesters. If a course is offered 2 times in the past 4 fall semesters, the
+			probability of getting that course in the next fall semester is 50%.
+		</p>
+
 		<!-- Removing filters option for now as there are less number of professors
 		  <div class="flex flex-col px-4 py-2">
 			<button

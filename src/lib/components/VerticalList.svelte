@@ -14,7 +14,7 @@
 
 	// Function to get the appropriate color class based on course type
 	function getTypeColorClass(type) {
-		console.log(type);
+
 		switch (type) {
 			case 'core':
 				return 'bg-white dark:bg-darkInner text-bradley border-bradley border-[1px] dark:hover:border-bradley dark:hover:bg-bradley dark:hover:text-white hover:bg-bradley hover:text-white hover:border-white'; // Blue
@@ -57,14 +57,34 @@
 		return semester.toLowerCase().includes('fall');
 	}
 
+	function isSpringSemester() {
+		return semester.toLowerCase().includes('spring');
+	}
+
+	function isSummerSemester() {
+		return semester.toLowerCase().includes('summer');
+	}
+
+	function isJanuarySemester() {
+		return semester.toLowerCase().includes('january');
+	}
+
 	// Function to get the appropriate availability percentage
 	function getAvailability(item) {
-		return isFallSemester() ? item.fall_availability : item.spring_availability;
+		if (isFallSemester()) return item.fall_availability;
+		if (isSpringSemester()) return item.spring_availability;
+		if (isSummerSemester()) return item.summer_availability;
+		if (isJanuarySemester()) return item.january_availability;
+		return 0;
 	}
 
 	// Function to get the appropriate professors
 	function getProfessors(item) {
-		return isFallSemester() ? item.fall_professors : item.spring_professors;
+		if (isFallSemester()) return item.fall_professors;
+		if (isSpringSemester()) return item.spring_professors;
+		if (isSummerSemester()) return item.summer_professors;
+		if (isJanuarySemester()) return item.january_professors;
+		return [];
 	}
 </script>
 

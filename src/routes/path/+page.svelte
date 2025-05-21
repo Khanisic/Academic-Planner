@@ -229,5 +229,9 @@
 			</div>
 
 		</div>
+		<div class="mt-10 flex flex-col items-center gap-1">
+			<p class="text-dark dark:text-text font-base text-sm">Made with ❤️ by Abdul Moid Khan Mohammed</p>
+			<p class="text-dark dark:text-text font-base text-sm">Under the guidance of Dr. G.G. Md Nawaz Ali</p>
+		</div>
 	</div>
 </div>

@@ -24,16 +24,16 @@
 	function generateSemesters(startIntake) {
 		const [season, year] = startIntake.split(' ');
 		const yearNum = parseInt(year);
-		const seasons = ['Spring', 'Fall'];
+		const seasons = ['Spring', 'Summer', 'Fall', 'January'];
 		const startIndex = seasons.indexOf(season);
 
 		semesters = [];
 		semesterData = {};
 
-		// Generate 4 semesters starting from the selected intake
-		for (let i = 0; i < 4; i++) {
-			const currentSeason = seasons[(startIndex + i) % 2];
-			const currentYear = yearNum + Math.floor((startIndex + i) / 2);
+		// Generate 6 semesters starting from the selected intake
+		for (let i = 0; i < 8; i++) {
+			const currentSeason = seasons[(startIndex + i) % 4];
+			const currentYear = yearNum + Math.floor((startIndex + i) / 4);
 			const semesterName = `${currentSeason} ${currentYear}`;
 			semesters.push(semesterName);
 			semesterData[semesterName] = [];
@@ -88,7 +88,7 @@
 			let res = await response.json();
 
 			// Add type information to each course
-			generatedData = res.courseData.map(course => ({
+			generatedData = res.courseData.map((course) => ({
 				...course,
 				type: getCourseType(course)
 			}));
@@ -96,8 +96,6 @@
 			availableCourses = [...generatedData]; // Initialize available courses
 			allProfessors = res.allProfessors;
 			selectedProfessors = [...allProfessors];
-
-			console.log(res);
 		} catch (error) {
 			console.error('Error fetching generated data:', error);
 		}
@@ -116,17 +114,26 @@
 		semesters.forEach((semester) => {
 			const semesterCourses = semesterData[semester] || [];
 			const isFall = semester.toLowerCase().includes('fall');
+			const isSpring = semester.toLowerCase().includes('spring');
 			const isLocked = lockedSemesters[semester];
 
 			// Calculate total probability for the semester
 			const semesterTotal = semesterCourses.reduce((acc, course) => {
 				// If semester is locked, count as 100% probability
-				const availability = isLocked ? 1 : (isFall ? course.fall_availability : course.spring_availability);
+				const availability = isLocked
+					? 1
+					: isFall
+						? course.fall_availability
+						: course.spring_availability;
 				return acc + availability;
 			}, 0);
 
-			totalProbability += semesterTotal;
-			totalCourses += semesterCourses.length;
+			// Only count major semesters (Fall/Spring) in the first 3 positions
+			const semesterIndex = semesters.indexOf(semester);
+			if ((isFall || isSpring) && semesterIndex < 3) {
+				totalProbability += semesterTotal;
+				totalCourses += semesterCourses.length;
+			}
 		});
 
 		// Calculate final probability, defaulting to 0 if no courses
@@ -136,29 +143,59 @@
 	// Function to check if a semester has reached its course limit
 	function canAddCourse(semester) {
 		const semesterIndex = semesters.indexOf(semester);
-		// First 3 semesters have a limit of 3 courses
-		if (semesterIndex < 4) {
-			return (semesterData[semester]?.length || 0) < 4;
+		const isSummerOrJanuary =
+			semester.toLowerCase().includes('summer') || semester.toLowerCase().includes('january');
+		const currentCourses = semesterData[semester]?.length || 0;
+
+		// Summer and January semesters can only have 1 course
+		if (isSummerOrJanuary) {
+			return currentCourses < 2;
 		}
-		return true; // No limit for the last semester
+
+		// First 3 major semesters (Fall/Spring) must have at least 3 courses
+		if (semesterIndex < 4) {
+			return currentCourses < 4;
+		}
+
+		return true; // No limit for other semesters
 	}
 
-	function handleCourseMove(course, fromSemester, toSemester) {
+	function handleCourseMove(courseTaken, fromSemester, toSemester) {
+		console.log(courseTaken);
 		if (!canAddCourse(toSemester)) {
-			toast.error('Maximum 3 courses allowed in the first 3 semesters');
+			const isSummerOrJanuary =
+				toSemester.toLowerCase().includes('summer') || toSemester.toLowerCase().includes('january');
+			if (isSummerOrJanuary) {
+				toast.error('Maximum 1 course allowed in Summer/January semesters');
+
+				semesterData[toSemester] = semesterData[toSemester].filter(
+					(course) => course.id != courseTaken.id
+				);
+				const allSemesterCourseIds = Object.values(semesterData)
+					.flat()
+					.map((course) => course.id);
+
+				availableCourses = generatedData.filter(
+					(course) => !allSemesterCourseIds.includes(course.id)
+				);
+				calculateTotalProb();
+			} else {
+				toast.error('Maximum 3 courses allowed in Fall/Spring semesters');
+				semesterData[toSemester] = semesterData[toSemester].filter(
+					(course) => course.id != courseTaken.id
+				);
+				const allSemesterCourseIds = Object.values(semesterData)
+					.flat()
+					.map((course) => course.id);
+
+				availableCourses = generatedData.filter(
+					(course) => !allSemesterCourseIds.includes(course.id)
+				);
+			}
 			return false;
 		}
 
-		// if (fromSemester) {
-		// 	semesterData[fromSemester] = semesterData[fromSemester].filter(c => c !== course);
-		// 	availableCourses = [...availableCourses, course];
-		// }
-		// if (toSemester) {
-		// 	semesterData[toSemester] = [...(semesterData[toSemester] || []), course];
-		// 	availableCourses = availableCourses.filter(c => c !== course);
-		// }
 		calculateTotalProb();
-
 		return true;
 	}
 
@@ -253,11 +290,15 @@
 	<!-- Course Type Legend -->
 	<div class="flex flex-wrap gap-3 mt-2 mb-4">
 		<div class="flex items-center gap-2">
-			<div class="w-4 h-4 rounded-full bg-bradley dark:bg-bradley border-bradley border-[1px]"></div>
+			<div
+				class="w-4 h-4 rounded-full bg-bradley dark:bg-bradley border-bradley border-[1px]"
+			></div>
 			<p class="font-base text-dark dark:text-white">Core Courses</p>
 		</div>
 		<div class="flex items-center gap-2">
-			<div class="w-4 h-4 rounded-full bg-purple dark:bg-lightpurple border-purple border-[1px]"></div>
+			<div
+				class="w-4 h-4 rounded-full bg-purple dark:bg-lightpurple border-purple border-[1px]"
+			></div>
 			<p class="font-base text-dark dark:text-white">Concentration 1</p>
 		</div>
 		<div class="flex items-center gap-2">
@@ -313,7 +354,7 @@
 								</svg>
 							</button>
 							<div class="flex gap-2">
-								<button 
+								<button
 									on:click={() => toggleSemesterLock(semester)}
 									class="px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full"
 								>

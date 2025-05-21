@@ -55,6 +55,8 @@ export async function POST({ request }) {
             // Initialize counters and professor lists
             const fallProfessors = [];
             const springProfessors = [];
+            const summerProfessors = [];
+            const januaryProfessors = [];
 
             // Iterate through each offering to gather data
             for (let offer of offerings) {
@@ -87,12 +89,34 @@ export async function POST({ request }) {
                         season: semester.season,
                         active: offer.faculty.active
                     });
+                } else if (season === 'summer') {
+                    if (!allProfessors.includes(offer.faculty.name) && offer.faculty.active) {
+                        allProfessors.push(offer.faculty.name)
+                    }
+                    summerProfessors.push({
+                        faculty: offer.faculty.name,
+                        year: semester.year,
+                        season: semester.season,
+                        active: offer.faculty.active
+                    });
+                } else if (season === 'january') {
+                    if (!allProfessors.includes(offer.faculty.name) && offer.faculty.active) {
+                        allProfessors.push(offer.faculty.name)
+                    }
+                    januaryProfessors.push({
+                        faculty: offer.faculty.name,
+                        year: semester.year,
+                        season: semester.season,
+                        active: offer.faculty.active
+                    });
                 }
             }
 
             // Calculate availability percentages
             const totalFallSemesters = 3; // Total number of fall semesters in our data
             const totalSpringSemesters = 3; // Total number of spring semesters in our data
+            const totalSummerSemesters = 3; // Total number of summer semesters in our data
+            const totalJanuarySemesters = 3; // Total number of january semesters in our data
 
             // Get unique year-semester combinations with at least one active professor
             const activeFallSemesters = new Set(
@@ -107,8 +131,22 @@ export async function POST({ request }) {
                     .map(prof => `${prof.year}-${prof.season}`)
             );
 
+            const activeSummerSemesters = new Set(
+                summerProfessors
+                    .filter(prof => prof.active)
+                    .map(prof => `${prof.year}-${prof.season}`)
+            );
+
+            const activeJanuarySemesters = new Set(
+                januaryProfessors
+                    .filter(prof => prof.active)
+                    .map(prof => `${prof.year}-${prof.season}`)
+            );
+
             const fallAvailability = activeFallSemesters.size / totalFallSemesters;
             const springAvailability = activeSpringSemesters.size / totalSpringSemesters;
+            const summerAvailability = activeSummerSemesters.size / totalSummerSemesters;
+            const januaryAvailability = activeJanuarySemesters.size / totalJanuarySemesters;
 
             courseData.push({
                 id: `${course._id}-${courseCounter++}`, // Create unique ID using counter
@@ -116,8 +154,12 @@ export async function POST({ request }) {
                 course_details: course,
                 fall_availability: parseFloat(fallAvailability.toFixed(2)),
                 spring_availability: parseFloat(springAvailability.toFixed(2)),
+                summer_availability: parseFloat(summerAvailability.toFixed(2)),
+                january_availability: parseFloat(januaryAvailability.toFixed(2)),
                 fall_professors: fallProfessors,
                 spring_professors: springProfessors,
+                summer_professors: summerProfessors,
+                january_professors: januaryProfessors,
             });
         }
 

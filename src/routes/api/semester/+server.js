@@ -1,4 +1,3 @@
-
 import { json } from '@sveltejs/kit';
 
 import Program from '../../../db/models/programs.model';
@@ -25,6 +24,8 @@ export async function POST({ request }) {
             });
             return newOffering._id;
         }));
+
+        console.log(courseOfferingIds, season)
 
         const newSemester = await Semester.create({
             year,
@@ -136,11 +137,15 @@ export async function DELETE({ request }) {
     }
 
     try {
-        const deletedSemester = await Semester.findByIdAndDelete(id);
-
-        if (!deletedSemester) {
+        // First find the semester
+        const semester = await Semester.findById(id);
+        
+        if (!semester) {
             return json({ message: 'Semester not found' }, { status: 404 });
         }
+
+        // Then delete it
+        await semester.deleteOne();
 
         return json({ message: 'Semester deleted successfully' }, { status: 200 });
     } catch (error) {
