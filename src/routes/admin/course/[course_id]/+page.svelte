@@ -21,7 +21,7 @@
 			{course.course_dept.split(' ')[0]}
 			{course.course_code}
 			{course.course_title}
-			<span class="text-base text-dark">( {course.course_credit_hours} Credit Hours )</span>
+			<span class="text-base text-dark dark:text-text">( {course.course_credit_hours} Credit Hours )</span>
 		</h1>
 		<button
 			on:click={() => {
@@ -46,7 +46,7 @@
 			</svg>
 		</button>
 	</div>
-	<p class="font-base text-lg leading-5 mb-2">{course.course_description}</p>
+	<p class="font-base text-lg leading-5 mb-2 text-black dark:text-text">{course.course_description}</p>
 
 
 </div>

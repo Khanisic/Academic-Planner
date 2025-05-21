@@ -29,7 +29,8 @@
 	};
 
 	let showLeftBar = false;
-	let isAuthenticated = false;
+	let isAuthenticated = data.isAuthenticated;
+	let isLoading = false;
 
 	function toggleLeftBar() {
 		showLeftBar = !showLeftBar;
@@ -48,7 +49,11 @@
 	}
 </script>
 
-{#if !isAuthenticated}
+{#if isLoading}
+	<div class="flex items-center justify-center min-h-screen bg-leftBar dark:bg-darkLeftBar">
+		<div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue"></div>
+	</div>
+{:else if !isAuthenticated}
 	<AdminLogin />
 {/if}
 

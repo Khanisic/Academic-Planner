@@ -38,12 +38,12 @@
 			</svg>
 		</button>
 	</div>
-	<p class="font-base text-3xl leading-3 mb-2">{program.program_dept}</p>
-	<p class="font-base">{program.program_desc}</p>
-	<p class="font-base">{program.program_concentration_requirements}</p>
-	<p class="font-base">{program.program_core_requirements}</p>
-	<p class="font-base">{program.program_requirements}</p>
-	<p class="font-base">{program.program_visa_requirements}</p>
+	<p class="font-base text-3xl leading-3 mb-2 text-white">{program.program_dept}</p>
+	<p class="font-base text-black dark:text-text">{program.program_desc}</p>
+	<p class="font-base text-black dark:text-text">{program.program_concentration_requirements}</p>
+	<p class="font-base text-black dark:text-text">{program.program_core_requirements}</p>
+	<p class="font-base text-black dark:text-text">{program.program_requirements}</p>
+	<p class="font-base text-black dark:text-text">{program.program_visa_requirements}</p>
 
 	<p class="font-calm text-bradley text-4xl">
 		Concentrations: {program.program_concentrations.length}
@@ -54,15 +54,15 @@
 			class="flex gap-2 cursor-pointer mt-2 items-center"
 		>
 			<p
-				class="dark:bg-blue bg-purple flex justify-center items-center text-white font-calm min-w-8 min-h-8 rounded-xl"
+				class="dark:bg-blue  bg-purple flex justify-center items-center text-white font-calm min-w-8 min-h-8 rounded-xl"
 			>
 				{index + 1}.
 			</p>
 			<div class="flex flex-col gap-0 leading-4">
-				<p class="font-calm m-0 text-2xl w-fit hover:bg-purple hover:text-white px-2 rounded-md">
+				<p class="font-calm m-0 text-2xl w-fit text-black dark:text-white hover:bg-purple hover:text-white px-2 rounded-md">
 					{concentration.concentration_name}
 				</p>
-				<p class="px-2 m-0 font-base text-[16px] italic">{concentration.concentration_about}</p>
+				<p class="px-2 m-0 font-base text-[16px] text-black dark:text-text italic">{concentration.concentration_about}</p>
 			</div>
 		</a>
 	{/each}
@@ -81,18 +81,18 @@
 					href={`/admin/course/${courses.required_course._id}`}
 					class="flex gap-2 cursor-pointer mt-2 items-center w-fit"
 				>
-					<p class="font-base m-0 text-[20px] hover:bg-green hover:text-white px-2 rounded-md">
+					<p class="font-base m-0 text-[20px] text-black dark:text-white hover:bg-green hover:text-white px-2 rounded-md">
 						{courses.required_course.course_dept.split(' ')[0]}
 						{courses.required_course.course_code}
 						{courses.required_course.course_title}
 					</p>
 					{#if courses.altername_course}
-						<span class="italic font-calm">or</span>
+						<span class=" text-text italic font-calm">or</span>
 					{/if}
 				</a>
 				{#if courses.altername_course}
 					<a href={`/course/${courses.altername_course._id}`} class="">
-						<p class="font-base m-0 text-[20px] hover:bg-green hover:text-white px-2 rounded-md">
+						<p class="font-base m-0 text-[20px] text-black dark:text-white hover:bg-green hover:text-white px-2 rounded-md">
 							{courses.altername_course.course_dept.split(' ')[0]}
 							{courses.altername_course.course_code}
 							{courses.altername_course.course_title}

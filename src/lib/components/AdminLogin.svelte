@@ -4,14 +4,16 @@
     let username = '';
     let password = '';
     let error = '';
+    let isLoading = false;
 
     async function handleLogin() {
+        isLoading = true;
         if (username === PUBLIC_ADMIN_USERNAME && password === PUBLIC_ADMIN_PASSWORD) {
-            // Set cookie instead of session storage
             document.cookie = 'adminLoggedIn=true; path=/; max-age=86400'; // 24 hours
-            window.location.href = '/admin';
+            window.location.reload(); // Reload to get server-side auth state
         } else {
             error = 'Invalid credentials';
+            isLoading = false;
         }
     }
 </script>
@@ -33,6 +35,7 @@
                     bind:value={username}
                     class="w-full font-base p-2 border border-lightBorder dark:border-darkBorder rounded-lg bg-leftBar dark:bg-darkLeftBar text-text"
                     required
+                    disabled={isLoading}
                 />
             </div>
             
@@ -44,14 +47,20 @@
                     bind:value={password}
                     class="w-full font-base p-2 border border-lightBorder dark:border-darkBorder rounded-lg bg-leftBar dark:bg-darkLeftBar text-text"
                     required
+                    disabled={isLoading}
                 />
             </div>
 
             <button
                 type="submit"
-                class="font-base w-full bg-bradley  text-white py-2 rounded-lg hover:bg-blue transition-colors"
+                class="font-base w-full bg-bradley text-white py-2 rounded-lg hover:bg-blue transition-colors disabled:opacity-50"
+                disabled={isLoading}
             >
-                Login
+                {#if isLoading}
+                    <div class="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white mx-auto"></div>
+                {:else}
+                    Login
+                {/if}
             </button>
         </form>
     </div>

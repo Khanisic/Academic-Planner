@@ -74,12 +74,23 @@
 <Toaster />
 
 <div class="flex h-full relative top-0">
-	<button 
+	<button
 		class="absolute top-4 left-4 z-50 bg-leftBar dark:bg-black p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
 		on:click={toggleLeftBar}
 	>
-		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-bradley dark:text-white">
-			<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke-width="1.5"
+			stroke="currentColor"
+			class="size-6 text-bradley dark:text-white"
+		>
+			<path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
+			/>
 		</svg>
 	</button>
 	<div
@@ -91,11 +102,14 @@
 	</div>
 	<div class="w-full flex flex-col h-full">
 		<UpperBar bind:title />
-		<div class="flex flex-col h-full overflow-hidden">
-			<p class="px-20 text-text py-4 text-xl text-center font-base">Hello there 👋🏻, welcome to the Bradley University Academic Planner. <br> Please select your degree level and department to get started.</p>
+		<div class="flex flex-col h-2/3 overflow-hidden">
+			<p class="px-20 text-text py-4 text-xl text-center font-base">
+				Hello there 👋🏻, welcome to the Bradley University Academic Planner. <br /> Please select your
+				degree level and department to get started.
+			</p>
 			<div
-				class="w-full overflow-auto py-5 h-full  dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px]"
-			> 
+				class="w-full overflow-auto py-5 h-full dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px]"
+			>
 				<div class="flex gap-10 flex-wrap w-full justify-center px-5 md:px-10">
 					<div class="flex gap-5 items-start bg-transparent">
 						<div
@@ -227,11 +241,10 @@
 					{/if}
 				</div>
 			</div>
-
 		</div>
-		<div class="mt-10 flex flex-col items-center gap-1">
-			<p class="text-dark dark:text-text font-base text-sm">Made with ❤️ by Abdul Moid Khan Mohammed</p>
-			<p class="text-dark dark:text-text font-base text-sm">Under the guidance of Dr. G.G. Md Nawaz Ali</p>
+		<div class="mt-5 text-xl flex flex-col items-center gap-1">
+			<p class="text-dark dark:text-text font-calm">Made with ❤️ by Abdul Moid Khan Mohammed</p>
+			<p class="text-dark dark:text-text font-calm">Under the guidance of Dr. G.G. Md Nawaz Ali</p>
 		</div>
 	</div>
 </div>

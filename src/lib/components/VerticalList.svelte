@@ -10,7 +10,7 @@
 	export let lockedSemesters = {}; // Add prop for locked semesters
 
 	const dispatch = createEventDispatcher();
-	const flipDurationMs = 300;
+	const flipDurationMs = 400;
 
 	// Function to get the appropriate color class based on course type
 	function getTypeColorClass(type) {
@@ -108,7 +108,7 @@
 				<p class="font-base">
 					{item.course_details.course_dept.split(' ')[0]}
 					{item.course_details.course_code}
-					{item.course_details.course_title.slice(0, 40)}
+					{item.course_details.course_title}
 				</p>
 
 				{#if semSelection && !lockedSemesters[semester]}

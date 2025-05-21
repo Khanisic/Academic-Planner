@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import VerticalList from './VerticalList.svelte';
 	import toast from 'svelte-french-toast';
+	import Modal from './Modal.svelte';
 	export let step, finalCourses, allProfessors, selectedProfessors, currProbability, selectedIntake;
 	export let selectedCoreCourses = {};
 	export let selectedConc1Courses = {};
@@ -19,6 +20,8 @@
 
 	// Add state for locked semesters
 	let lockedSemesters = {};
+
+	let showModal = false;
 
 	// Function to generate semesters based on selected intake
 	function generateSemesters(startIntake) {
@@ -140,20 +143,38 @@
 		currProbability = totalCourses > 0 ? (totalProbability * 100) / totalCourses : 0;
 	};
 
-	// Function to check if a semester has reached its course limit
-	function canAddCourse(semester) {
+	function isMajorSemester(semester) {
+		return semester.toLowerCase().includes('fall') || semester.toLowerCase().includes('spring');
+	}
+
+	function getMajorSemesterIndex(semester) {
+		let majorCount = 0;
+		for (let i = 0; i <= semesters.indexOf(semester); i++) {
+			if (isMajorSemester(semesters[i])) {
+				majorCount++;
+			}
+		}
+		return majorCount;
+	}
+
+	function canAddCourse(semester, course) {
 		const semesterIndex = semesters.indexOf(semester);
 		const isSummerOrJanuary =
 			semester.toLowerCase().includes('summer') || semester.toLowerCase().includes('january');
 		const currentCourses = semesterData[semester]?.length || 0;
+		const majorSemesterIndex = getMajorSemesterIndex(semester);
 
-		// Summer and January semesters can only have 1 course
+		// Check if trying to add a core course in 3rd or 4th major semester
+		if (course?.type === 'core' && (majorSemesterIndex === 3 || majorSemesterIndex === 4)) {
+			toast.error('Core courses cannot be taken in 3rd or 4th major semester');
+			return false;
+		}
+
 		if (isSummerOrJanuary) {
 			return currentCourses < 2;
 		}
 
-		// First 3 major semesters (Fall/Spring) must have at least 3 courses
-		if (semesterIndex < 4) {
+		if (semesterIndex < 7) {
 			return currentCourses < 4;
 		}
 
@@ -161,37 +182,25 @@
 	}
 
 	function handleCourseMove(courseTaken, fromSemester, toSemester) {
-		console.log(courseTaken);
-		if (!canAddCourse(toSemester)) {
+	
+		if (!canAddCourse(toSemester, courseTaken)) {
 			const isSummerOrJanuary =
 				toSemester.toLowerCase().includes('summer') || toSemester.toLowerCase().includes('january');
 			if (isSummerOrJanuary) {
 				toast.error('Maximum 1 course allowed in Summer/January semesters');
-
-				semesterData[toSemester] = semesterData[toSemester].filter(
-					(course) => course.id != courseTaken.id
-				);
-				const allSemesterCourseIds = Object.values(semesterData)
-					.flat()
-					.map((course) => course.id);
-
-				availableCourses = generatedData.filter(
-					(course) => !allSemesterCourseIds.includes(course.id)
-				);
-				calculateTotalProb();
 			} else {
 				toast.error('Maximum 3 courses allowed in Fall/Spring semesters');
-				semesterData[toSemester] = semesterData[toSemester].filter(
-					(course) => course.id != courseTaken.id
-				);
-				const allSemesterCourseIds = Object.values(semesterData)
-					.flat()
-					.map((course) => course.id);
-
-				availableCourses = generatedData.filter(
-					(course) => !allSemesterCourseIds.includes(course.id)
-				);
 			}
+			semesterData[toSemester] = semesterData[toSemester].filter(
+				(course) => course.id != courseTaken.id
+			);
+			const allSemesterCourseIds = Object.values(semesterData)
+				.flat()
+				.map((course) => course.id);
+
+			availableCourses = generatedData.filter(
+				(course) => !allSemesterCourseIds.includes(course.id)
+			);
 			return false;
 		}
 
@@ -219,8 +228,7 @@
 
 	// Function to reset courses for a specific semester
 	const resetSemesterCourses = (semester) => {
-		console.log('here');
-		console.log(semesterData[semester]);
+
 		if (semesterData[semester]) {
 			// Get the IDs of courses in the current semester
 			const currentSemesterCourseIds = semesterData[semester].map((course) => course.id);
@@ -251,6 +259,42 @@
 		lockedSemesters = { ...lockedSemesters }; // Trigger reactivity
 		calculateTotalProb();
 	};
+
+	function handleDone() {
+		showModal = true;
+	}
+
+	function downloadCoursePlan() {
+		let content = `Academic Course Plan\n`;
+		content += `==================\n\n`;
+		content += `Intake: ${selectedIntake}\n\n`;
+
+		// Add semester-wise courses
+		semesters.forEach((semester) => {
+			content += `${semester}\n`;
+			content += `${'-'.repeat(semester.length)}\n`;
+
+			semesterData[semester].forEach((course) => {
+				const courseType = course.type.charAt(0).toUpperCase() + course.type.slice(1);
+				content += `[${courseType}] ${course.course_details.course_dept.split(' ')[0]} ${course.course_details.course_code}: ${course.course_details.course_title}\n`;
+			});
+			content += '\n';
+		});
+
+		// Add probability
+		content += `Overall Probability: ${currProbability.toFixed(1)}%\n`;
+
+		// Create and download file
+		const blob = new Blob([content], { type: 'text/plain' });
+		const url = window.URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = `Bradley_Course_Plan.txt`;
+		document.body.appendChild(a);
+		a.click();
+		window.URL.revokeObjectURL(url);
+		document.body.removeChild(a);
+	}
 </script>
 
 <div class="flex flex-col gap-2">
@@ -313,9 +357,17 @@
 
 	{#if generatedData.length > 0 && semesters.length > 0}
 		<div class="flex gap-4">
-			<div class="w-1/2">
-				<p class="font-calm text-black dark:text-white">Your Courses:</p>
+			<div class="w-1/2 sticky top-4 h-fit">
+				<p class="font-calm text-xl text-black dark:text-white">Your Courses:</p>
 				<VerticalList items={availableCourses} semSelection={false} />
+				<div class="mt-4 flex justify-end">
+					<button
+						on:click={handleDone}
+						class="px-6 py-2 font-calm bg-bradley text-white rounded-lg hover:bg-white hover:text-blue hover:border-blue border-bradley border-[1px] dark:hover:bg-darkBg dark:hover:text-white transition-colors duration-200"
+					>
+						Done
+					</button>
+				</div>
 			</div>
 			<div class="w-1/2">
 				{#each semesters as semester}
@@ -325,7 +377,7 @@
 								on:click={() => toggleSemester(semester)}
 								class="flex gap-4 relative group transition-colors duration-200 border-darkBorder cursor-pointer border-b-0 w-fit my-1 px-2 rounded-lg items-center"
 							>
-								<p class="font-calm text-black group-hover:text-bradley dark:text-white">
+								<p class="font-calm text-black text-xl group-hover:text-bradley dark:text-white">
 									{semester}:
 								</p>
 								<span
@@ -412,3 +464,61 @@
 		<p class="font-base text-text">Loading...</p>
 	{/if}
 </div>
+
+{#if showModal}
+	<Modal on:close={() => (showModal = false)}>
+		<div class="p-6">
+			<div class="flex justify-between items-center mb-4">
+				<h2 class="text-2xl font-calm text-black dark:text-white">Your Course Plan</h2>
+			</div>
+			<div class="space-y-4">
+				{#each semesters as semester}
+					<div class="border-b border-gray-200 dark:border-gray-700 pb-4">
+						<h3 class="text-xl font-calm mb-2 text-black dark:text-white">{semester}</h3>
+						<div class="space-y-2">
+							{#each semesterData[semester] as course}
+								<div class="flex items-center gap-2">
+									<div
+										class={`w-3 h-3 rounded-full ${course.type === 'core' ? 'bg-bradley' : course.type === 'concentration1' ? 'bg-purple' : course.type === 'concentration2' ? 'bg-blue' : 'bg-yellow'}`}
+									></div>
+									<p class="text-black dark:text-white font-base">
+										<span class="font-bold"
+											>{course.course_details.course_dept.split(' ')[0]}
+											{course.course_details.course_code}</span
+										>
+										: {course.course_details.course_title}
+									</p>
+								</div>
+							{/each}
+						</div>
+					</div>
+				{/each}
+				<div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+					<h3 class="text-xl font-calm mb-2 text-black dark:text-white">Overall Probability</h3>
+					<p class="text-2xl font-calm text-bradley">{currProbability.toFixed(1)}%</p>
+				</div>
+
+				<button
+					on:click={downloadCoursePlan}
+					class="flex items-center gap-2 px-4 py-2 font-calm bg-bradley text-white rounded-lg hover:bg-white hover:text-blue hover:border-blue border-bradley border-[1px] dark:hover:bg-darkBg dark:hover:text-white transition-colors duration-200"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke-width="1.5"
+						stroke="currentColor"
+						class="w-5 h-5"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+						/>
+					</svg>
+					Download Plan
+				</button>
+			</div>
+		</div>
+	</Modal>
+{/if}

@@ -36,8 +36,8 @@
 			</svg>
 		</button>
 	</div>
-	<p class="font-base text-3xl leading-3 mb-2">{concentration.concentration_dept}</p>
-	<p class="font-base">{concentration.concentration_about}</p>
+	<p class="font-base text-3xl leading-3 mb-2 text-black dark:text-white">{concentration.concentration_dept}</p>
+	<p class="font-base text-black dark:text-text">{concentration.concentration_about}</p>
 	<p class="font-calm text-bradley text-4xl">
 		Required Courses: {concentration.concentration_required_courses.length}
 	</p>
@@ -49,10 +49,10 @@
 				{index + 1}.
 			</p>
 			<div class="flex flex-col gap-0 leading-4">
-				<p class="font-calm m-0 text-2xl w-fit hover:bg-purple hover:text-white px-2 rounded-md">
+				<p class="font-calm m-0 text-2xl w-fit text-black dark:text-white hover:bg-purple hover:text-white px-2 rounded-md">
 					{course.course_title}
 				</p>
-				<p class="px-2 m-0 font-base text-[16px] italic">{course.course_description}</p>
+				<p class="px-2 m-0 font-base text-[16px] text-black dark:text-text italic">{course.course_description}</p>
 			</div>
 		</a>
 	{/each}
@@ -68,10 +68,10 @@
 				{index + 1}.
 			</p>
 			<div class="flex flex-col gap-0 leading-4">
-				<p class="font-calm m-0 text-2xl w-fit hover:bg-purple hover:text-white px-2 rounded-md">
+				<p class="font-calm m-0 text-2xl w-fit text-black dark:text-white hover:bg-purple hover:text-white px-2 rounded-md">
 					{course.course_title}
 				</p>
-				<p class="px-2 m-0 font-base text-[16px] italic">{course.course_description}</p>
+				<p class="px-2 m-0 font-base text-[16px] text-black dark:text-text italic">{course.course_description}</p>
 			</div>
 		</a>
 	{/each}

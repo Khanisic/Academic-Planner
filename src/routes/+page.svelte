@@ -150,7 +150,7 @@
 				<div class="max-w-4xl mx-auto">
 					<div class="text-center mb-5">
 						<h1 class="text-4xl font-calm text-text mb-4">
-							Welcome to Bradley University Academic Planner
+							Welcome 🙌🏻
 						</h1>
 						<p class="text-lg text-text/80 font-base">
 							Your personalized guide to academic success at Bradley University

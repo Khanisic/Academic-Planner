@@ -480,7 +480,7 @@ ${JSON.stringify(CIS_courses)}
 								placeholder={chatHistory.length > 0
 									? `Message Bradley Academic Helper`
 									: `Hey, I'm John Doe and want to make an academic plan for my Master's in Computer Science.`}
-								class="bg-lightpurple dark:bg-text text-xl font-base placeholder:text-gray-100 dark:placeholder:text-gray-400 outline-none w-full border-none px-6 py-3 rounded-full"
+								class="bg-lightpurple dark:bg-text text-xl font-base placeholder:text-gray-100 dark:placeholder:text-gray-400 outline-none w-4/6 border-none px-6 py-3 rounded-full"
 								bind:value={prompt}
 							/>
 
@@ -579,7 +579,7 @@ ${JSON.stringify(CIS_courses)}
 										>
 									</li>
 									<li class="flex items-start gap-2">
-										<span class="font-base dark:text-text"
+										<span class="font-base  dark:text-text"
 											>"I prefer to complete my core courses as soon as possible"</span
 										>
 									</li>

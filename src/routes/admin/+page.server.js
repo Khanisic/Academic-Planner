@@ -4,10 +4,10 @@
 import Program from '../../db/models/programs.model'
 import Semester from '../../db/models/semester.model'
 import connectDB from '../../db/db';
-import { checkAuth } from '$lib/server/auth';
+
 
 export async function load({ cookies }) {
-    checkAuth(cookies, true);
+    const isAuthenticated = cookies.get('adminLoggedIn') === 'true';
     
     await connectDB();
     let programs;
@@ -23,6 +23,7 @@ export async function load({ cookies }) {
     }
 
     return {
+        isAuthenticated,
         programs: JSON.parse(JSON.stringify(programs)),
         semesters: JSON.parse(JSON.stringify(semesters))
     };
