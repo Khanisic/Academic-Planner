@@ -335,7 +335,7 @@
 			</div>
 
 			<div
-				class="w-full hidden lg:block lg:w-[77%] overflow-auto bar pb-40 border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px]"
+				class="w-full hidden lg:block lg:w-[84%] overflow-auto bar pb-40 border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px]"
 			>
 				<div class="p-4 sm:p-5 md:px-10 flex flex-col gap-4 relative bg-transparent">
 					<div class="w-full items-start justify-start flex flex-col gap-1 relative">
@@ -444,7 +444,7 @@
 			</div>
 
 			<div
-				class="w-[23%] hidden top-0 sticky lg:flex flex-col gap-3 px-2 pt-3 items-center overflow-y-auto bar"
+				class="w-[16%] hidden top-0 sticky lg:flex flex-col gap-3 px-2 pt-3 items-center overflow-y-auto bar"
 			>
 				<RightPath
 					bind:step
