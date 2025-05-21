@@ -95,7 +95,7 @@
 			</svg>
 		</button>
 		<div
-			class="bg-leftBar top-0 absolute z-40 dark:bg-black rounded-l-xl border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px] h-full w-1/6 transition-transform duration-300 ease-in-out"
+			class="bg-leftBar  min-w-[200px]  top-0 absolute z-40 dark:bg-black rounded-l-xl border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px] h-full w-1/6 transition-transform duration-300 ease-in-out"
 			class:translate-x-0={showLeftBar}
 			class:-translate-x-[100%]={!showLeftBar}
 		>

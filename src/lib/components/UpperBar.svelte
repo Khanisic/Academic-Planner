@@ -27,17 +27,17 @@
 <Toaster />
 
 <div
-	class="dark:border-b-darkBorder border-b-lightBorder border-r-0 border-l-0 border-t-0 border-[1px] w-full flex py-4 px-4"
+	class="dark:border-b-darkBorder border-b-lightBorder border-r-0 border-l-0 border-t-0 border-[1px] w-full flex flex-col sm:flex-row py-4 px-4 relative"
 >
 	<div class="w-full flex flex-col justify-center items-center">
-		<p class="font-calm text-4xl text-bradley">{title}</p>
-
+		<p class="font-calm text-2xl sm:text-3xl md:text-4xl text-bradley text-center">{title}</p>
 	</div>
-	<div class="w-1/6 absolute right-0 flex justify-around items-center">
+	<div class="w-full sm:w-auto mt-4 sm:mt-0 sm:absolute sm:right-4 flex justify-center sm:justify-end items-center gap-4">
 		<button
 			on:click={() => {
 				handleSwitchDarkMode();
 			}}
+			class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
 		>
 			{#if darkMode}
 				<svg
@@ -46,7 +46,7 @@
 					viewBox="0 0 24 24"
 					stroke-width="1.5"
 					stroke="currentColor"
-					class="size-6 stroke-text"
+					class="size-5 sm:size-6 stroke-text"
 				>
 					<path
 						stroke-linecap="round"
@@ -59,7 +59,7 @@
 					xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 24 24"
 					fill="currentColor"
-					class="size-6 stroke-text"
+					class="size-5 sm:size-6 stroke-text"
 				>
 					<path
 						fill-rule="evenodd"
@@ -72,7 +72,7 @@
 
 		<button
 			on:click={handleShare}
-			class="flex items-center dark:hover:bg-blue hover:bg-blue group text-text gap-2 dark:bg-darkLeftBar bg-leftBar rounded-lg font-calm px-3 py-1"
+			class="flex items-center dark:hover:bg-blue hover:bg-blue group text-text gap-2 dark:bg-darkLeftBar bg-leftBar rounded-lg font-calm px-2 sm:px-3 py-1 text-sm sm:text-base"
 		>
 			<p class="group-hover:text-black">Share</p>
 			<svg
@@ -81,7 +81,7 @@
 				viewBox="0 0 24 24"
 				stroke-width="1.5"
 				stroke="currentColor"
-				class="size-5 group-hover:stroke-black"
+				class="size-4 sm:size-5 group-hover:stroke-black"
 			>
 				<path
 					stroke-linecap="round"

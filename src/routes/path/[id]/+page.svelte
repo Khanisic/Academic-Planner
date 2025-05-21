@@ -275,7 +275,6 @@
 			});
 		}
 		if (step == 6) {
-			
 			// step = 7; // Move to the next step after intake selection
 		}
 
@@ -296,22 +295,32 @@
 	function toggleLeftBar() {
 		showLeftBar = !showLeftBar;
 	}
-
 </script>
 
 <Toaster />
 
 <div class="flex h-full relative top-0">
-	<button 
+	<button
 		class="absolute top-4 left-4 z-50 bg-leftBar dark:bg-black p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
 		on:click={toggleLeftBar}
 	>
-		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-bradley dark:text-white">
-			<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke-width="1.5"
+			stroke="currentColor"
+			class="size-6 text-bradley dark:text-white"
+		>
+			<path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
+			/>
 		</svg>
 	</button>
 	<div
-		class="bg-leftBar top-0 absolute z-40 dark:bg-black rounded-l-xl border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px] h-full w-1/6 transition-transform duration-300 ease-in-out"
+		class="bg-leftBar min-w-[200px] top-0 absolute z-40 dark:bg-black rounded-l-xl border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px] h-full w-1/6 transition-transform duration-300 ease-in-out"
 		class:translate-x-0={showLeftBar}
 		class:-translate-x-[100%]={!showLeftBar}
 	>
@@ -320,16 +329,20 @@
 
 	<div class="w-full flex flex-col h-full">
 		<UpperBar bind:title />
-		<div class="flex h-full overflow-hidden">
+		<div class="flex flex-col lg:flex-row h-full overflow-hidden">
+			<div class="w-full lg:hidden flex justify-center items-center h-full font-calm text-4xl text-center px-10">
+				<p>Please use a laptop to continue, we are not compatible with smartphones</p>
+			</div>
+
 			<div
-				class="w-[77%] overflow-auto bar pb-40 border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px]"
+				class="w-full hidden lg:block lg:w-[77%] overflow-auto bar pb-40 border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px]"
 			>
-				<div class="p-5 md:px-10 flex flex-col gap-4 relative bg-transparent">
+				<div class="p-4 sm:p-5 md:px-10 flex flex-col gap-4 relative bg-transparent">
 					<div class="w-full items-start justify-start flex flex-col gap-1 relative">
-						<h1 class="text-bradley font-calm text-2xl md:text-4xl bg-transparent">
+						<h1 class="text-bradley font-calm text-xl sm:text-2xl md:text-4xl bg-transparent">
 							{program.program_name}
 						</h1>
-						<p class="dark:text-white text-dark font-base bg-transparent">
+						<p class="dark:text-white text-dark font-base text-sm sm:text-base bg-transparent">
 							{program.program_desc}
 						</p>
 					</div>
@@ -399,7 +412,7 @@
 							bind:allProfessors
 							bind:finalCourses
 							bind:step
-							selectedIntake={selectedIntake}
+							{selectedIntake}
 							{selectedCoreCourses}
 							{selectedConc1Courses}
 							{selectedConc2Courses}
@@ -431,7 +444,7 @@
 			</div>
 
 			<div
-				class="w-[23%] top-0 sticky flex flex-col gap-3 px-2 pt-3 items-center overflow-y-auto bar"
+				class="w-[23%] hidden top-0 sticky lg:flex flex-col gap-3 px-2 pt-3 items-center overflow-y-auto bar"
 			>
 				<RightPath
 					bind:step
