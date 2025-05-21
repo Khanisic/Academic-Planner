@@ -1,21 +1,26 @@
 import { json } from '@sveltejs/kit';
+import Message from '../../../db/models/message.model';
+import connectDB from '../../../db/db';
 
 export async function POST({ request }) {
+    await connectDB();
+
     try {
         const data = await request.json();
         const { name, email, subject, message } = data;
 
-        // Here you would typically:
-        // 1. Validate the input
-        // 2. Send an email using a service like SendGrid, AWS SES, etc.
-        // 3. Store the message in a database
-        
-        // For now, we'll just log the data and return a success response
-        console.log('Contact form submission:', { name, email, subject, message });
+        // Create and save the message to database
+        const newMessage = await Message.create({
+            name,
+            email,
+            subject,
+            message
+        });
 
+        console.log('Message saved:', newMessage);
         return json({
             success: true,
-            message: 'Message received successfully'
+            message: 'Message received and stored successfully'
         });
     } catch (error) {
         console.error('Error processing contact form:', error);

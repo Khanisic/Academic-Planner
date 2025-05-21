@@ -191,7 +191,7 @@
 									type="text"
 									id="name"
 									bind:value={formData.name}
-									class="w-full px-4 py-2 rounded-lg bg-leftBar dark:bg-darkLeftBar border border-lightBorder dark:border-darkBorder text-text focus:outline-none focus:ring-2 focus:ring-blue"
+									class="w-full font-base px-4 py-2 rounded-lg bg-leftBar dark:bg-darkLeftBar border border-lightBorder dark:border-darkBorder text-text focus:outline-none focus:ring-2 focus:ring-blue"
 									required
 								/>
 							</div>
@@ -204,7 +204,7 @@
 									type="email"
 									id="email"
 									bind:value={formData.email}
-									class="w-full px-4 py-2 rounded-lg bg-leftBar dark:bg-darkLeftBar border border-lightBorder dark:border-darkBorder text-text focus:outline-none focus:ring-2 focus:ring-blue"
+									class="w-full font-base px-4 py-2 rounded-lg bg-leftBar dark:bg-darkLeftBar border border-lightBorder dark:border-darkBorder text-text focus:outline-none focus:ring-2 focus:ring-blue"
 									required
 								/>
 							</div>
@@ -217,7 +217,7 @@
 									type="text"
 									id="subject"
 									bind:value={formData.subject}
-									class="w-full px-4 py-2 rounded-lg bg-leftBar dark:bg-darkLeftBar border border-lightBorder dark:border-darkBorder text-text focus:outline-none focus:ring-2 focus:ring-blue"
+									class="w-full font-base px-4 py-2 rounded-lg bg-leftBar dark:bg-darkLeftBar border border-lightBorder dark:border-darkBorder text-text focus:outline-none focus:ring-2 focus:ring-blue"
 									required
 								/>
 							</div>
