@@ -1,16 +1,15 @@
 <script>
+    import { PUBLIC_ADMIN_USERNAME, PUBLIC_ADMIN_PASSWORD } from '$env/static/public';
+    
     let username = '';
     let password = '';
     let error = '';
 
-    // Simple hardcoded credentials - in a real app, these would be stored securely
-    const ADMIN_USERNAME = 'admin';
-    const ADMIN_PASSWORD = 'admin123';
-
-    function handleLogin() {
-        if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-            sessionStorage.setItem('adminLoggedIn', 'true');
-            window.location.reload();
+    async function handleLogin() {
+        if (username === PUBLIC_ADMIN_USERNAME && password === PUBLIC_ADMIN_PASSWORD) {
+            // Set cookie instead of session storage
+            document.cookie = 'adminLoggedIn=true; path=/; max-age=86400'; // 24 hours
+            window.location.href = '/admin';
         } else {
             error = 'Invalid credentials';
         }

@@ -1,10 +1,14 @@
-// src/routes/admin/program/[id]/+page.server.js
-import { json } from '@sveltejs/kit';
+// src/routes/admin/+page.server.js
+
+
 import Program from '../../db/models/programs.model'
 import Semester from '../../db/models/semester.model'
 import connectDB from '../../db/db';
-export async function load({ fetch }) {
+import { checkAuth } from '$lib/server/auth';
 
+export async function load({ cookies }) {
+    checkAuth(cookies, true);
+    
     await connectDB();
     let programs;
     let semesters;
@@ -13,7 +17,6 @@ export async function load({ fetch }) {
         semesters = await Semester.find().lean();
 
     } catch (error) {
-
         return {
             error: error.message
         };
@@ -23,5 +26,4 @@ export async function load({ fetch }) {
         programs: JSON.parse(JSON.stringify(programs)),
         semesters: JSON.parse(JSON.stringify(semesters))
     };
-
 }

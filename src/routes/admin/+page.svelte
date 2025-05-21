@@ -36,17 +36,20 @@
 	}
 
 	onMount(() => {
-		isAuthenticated = sessionStorage.getItem('adminLoggedIn') === 'true';
+	
+		const cookies = document.cookie.split(';');
+		const adminCookie = cookies.find(cookie => cookie.trim().startsWith('adminLoggedIn='));
+		isAuthenticated = adminCookie?.includes('true') || false;
 	});
 
 	function handleLogout() {
-		sessionStorage.removeItem('adminLoggedIn');
+		document.cookie = 'adminLoggedIn=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
 		isAuthenticated = false;
 	}
 </script>
 
 {#if !isAuthenticated}
-	<AdminLogin bind:isAuthenticated />
+	<AdminLogin />
 {/if}
 
 {#if openAddCourseModal}
@@ -134,6 +137,8 @@
 								Departments
 							</p></button
 						>
+						<!-- 
+						Removed Courses
 						<button
 							on:click={() => {
 								setSelection('courses');
@@ -143,7 +148,9 @@
 							>
 								Courses
 							</p></button
-						>
+						> -->
+						<!--
+						Removed Faculty
 						<button
 							on:click={() => {
 								setSelection('faculty');
@@ -153,7 +160,7 @@
 							>
 								Faculty
 							</p></button
-						>
+						> -->
 					</div>
 
 					<div class="p-4 flex flex-col items-center">
@@ -255,27 +262,27 @@
 
 						{#if selection == 'departments'}
 							<div class="flex flex-wrap gap-4">
-								{#each departments as department, index}
+								<!-- Removed logic for multiple departments -->
 									<a
-										href={`admin/department/${department.code}`}
+										href={`admin/department/${departments[0].code}`}
 										class="flex gap-2 cursor-pointer mt-2 items-center group hover:border-black border-[1px] hover:dark:border-blue dark:border-darkBorder p-4 rounded-lg w-fit bg-leftBar dark:bg-darkLeftBar"
 										data-sveltekit-preload-data="off"
 									>
 										<p
 											class=" bg-blue flex justify-center items-center text-white font-calm w-8 h-8 rounded-xl"
 										>
-											{index + 1}.
+											1.
 										</p>
 										<div class="flex flex-col gap-0 leading-3">
 											<p
 												class="font-calm m-0 px-2 text-text dark:group-hover:text-blue group-hover:text-black rounded-lg text-lg"
 											>
-												{department.name}
-												({department.code})
+												{departments[0].name}
+												({departments[0].code})
 											</p>
 										</div>
 									</a>
-								{/each}
+								
 							</div>
 						{/if}
 					</div>
