@@ -240,7 +240,7 @@ ${JSON.stringify(CIS_courses)}
 		</svg>
 	</button>
 	<div
-		class="bg-leftBar min-w-[200px]  top-0 absolute z-40 dark:bg-black rounded-l-xl border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px] h-full w-1/6 transition-transform duration-300 ease-in-out"
+		class="bg-leftBar min-w-[200px] top-0 absolute z-40 dark:bg-black rounded-l-xl border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px] h-full w-1/6 transition-transform duration-300 ease-in-out"
 		class:translate-x-0={showLeftBar}
 		class:-translate-x-[100%]={!showLeftBar}
 	>
@@ -252,6 +252,33 @@ ${JSON.stringify(CIS_courses)}
 			<div
 				class="w-[84%] overflow-auto bar h-full border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px]"
 			>
+				{#if selection}
+					<div class={`flex w-full gap-3 z-50 relative`}>
+						<button
+							on:click={() => {
+								selection = null;
+								chatHistory = [];
+							}}
+							class={`flex absolute left-5 top-5 gap-2 items-center text-center font-base dark:text-lightpurple bg-white dark:bg-purple hover:dark:text-white border-purple border-[1px] px-4 text-lg rounded-xl py-1.5 hover:bg-purple hover:text-white cursor-pointer`}
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="1.5"
+								stroke="currentColor"
+								class="size-5"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
+								/>
+							</svg>
+							Back
+						</button>
+					</div>
+				{/if}
 				<div
 					class={`flex flex-col ${chatHistory.length == 0 ? 'items-center justify-center' : ''} w-full relative h-full`}
 				>
@@ -410,33 +437,7 @@ ${JSON.stringify(CIS_courses)}
 							{/each}
 						</div>
 					{/if}
-					{#if selection}
-						<div class="flex w-full gap-3 justify-center mb-4">
-							<button
-								on:click={() => {
-									selection = null;
-									chatHistory = [];
-								}}
-								class="flex gap-2 items-center text-center font-base dark:text-lightpurple hover:dark:text-white border-purple border-[1px] px-4 text-lg rounded-xl py-1.5 hover:bg-purple hover:text-white cursor-pointer"
-							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke-width="1.5"
-									stroke="currentColor"
-									class="size-5"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
-									/>
-								</svg>
-								Back to Selection
-							</button>
-						</div>
-					{/if}
+
 					{#if selection == 'qa'}
 						<div
 							class="flex gap-2 absolute w-full ai-input justify-center px-10"
@@ -444,7 +445,7 @@ ${JSON.stringify(CIS_courses)}
 						>
 							<input
 								placeholder="Tell me about CS 590..."
-								class="bg-lightpurple dark:bg-text text-xl font-base placeholder:text-gray-100 dark:placeholder:text-gray-400 outline-none w-full border-none px-6 py-3 rounded-full"
+								class="bg-lightpurple w-4/6 dark:bg-text text-xl font-base placeholder:text-gray-100 dark:placeholder:text-gray-400 outline-none border-none px-6 py-3 rounded-full"
 								bind:value={prompt}
 							/>
 
@@ -579,7 +580,7 @@ ${JSON.stringify(CIS_courses)}
 										>
 									</li>
 									<li class="flex items-start gap-2">
-										<span class="font-base  dark:text-text"
+										<span class="font-base dark:text-text"
 											>"I prefer to complete my core courses as soon as possible"</span
 										>
 									</li>
