@@ -39,9 +39,10 @@
 		}
 
 		selectedElective = [...selectedElective, course];
-
+		
 		finalAllCourses = [...allCourses, ...selectedElective];
-
+		
+		toast.success(`Added ${course} to electives`);
 		if (finalAllCourses.length == 11) {
 			step = -6;
 		}

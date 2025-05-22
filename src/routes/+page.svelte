@@ -145,11 +145,11 @@
 		<UpperBar bind:title />
 		<div class="flex h-full overflow-hidden">
 			<div
-				class="w-full overflow-auto bar py-10 h-full border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px] px-8"
+				class="w-full overflow-auto bar py-3 h-full border-r-lightBorder dark:border-r-darkBorder border-t-0 border-b-0 border-l-0 border-[1px] px-8"
 			>
 				<div class="max-w-4xl mx-auto">
-					<div class="text-center mb-5">
-						<h1 class="text-4xl font-calm text-text mb-4">
+					<div class="text-center mb-2">
+						<h1 class="text-4xl font-calm text-text mb-2">
 							Welcome 🙌🏻
 						</h1>
 						<p class="text-lg text-text/80 font-base">
@@ -157,10 +157,10 @@
 						</p>
 					</div>
 
-					<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 						{#each features as feature, i}
 							<div
-								class="bg-leftBar group hover:bg-white dark:hover:border-blue hover:border-bradley transition-all ease-in-out duration-150 border-lightBorder dark:border-darkBorder border-2 dark:bg-darkLeftBar p-6 rounded-xl"
+								class="bg-leftBar h-[156px] group hover:bg-white dark:hover:border-blue hover:border-bradley transition-all ease-in-out duration-150 border-lightBorder dark:border-darkBorder border-2 dark:bg-darkLeftBar p-4 rounded-xl"
 							>
 								<div class="flex items-center gap-3 mb-4">
 									<div class="transition-all duration-300 ease-in-out">
@@ -198,7 +198,7 @@
 						</a>
 					</div>
 				</div>
-				<div class="mt-10 text-xl flex flex-col items-center gap-1">
+				<div class="mt-4 text-xl flex flex-col items-center gap-1">
 					<p class="text-dark dark:text-text font-calm">Made with ❤️ by Abdul Moid Khan Mohammed</p>
 					<p class="text-dark dark:text-text font-calm">
 						Under the guidance of Dr. G.G. Md Nawaz Ali

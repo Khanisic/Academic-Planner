@@ -125,6 +125,7 @@
 
 		if (electivesTaken <= electivesCanTake) {
 			selectedConc1Courses[code] = true;
+			toast.success(`Added ${code} to concentration 2`);
 			totalHours += course[0].course_credit_hours;
 		} else {
 			toast.error('Maximum electives reached, click on a selected elective to remove it!');
@@ -180,6 +181,7 @@
 
 		if (electivesTaken <= electivesCanTake) {
 			selectedConc2Courses[code] = true;
+			toast.success(`Added ${code} to concentration 2`);
 			totalHours += course[0].course_credit_hours;
 		} else {
 			toast.error('Maximum electives reached, click on a selected elective to remove it!');
@@ -216,6 +218,7 @@
 			step = -4;
 			totalHours = 0;
 		}
+		toast.success(`Added Concentration 1: ${concentration1Details.name}`);
 	};
 
 	const setConcentration2 = (con, num) => {
@@ -243,6 +246,7 @@
 			step = -5;
 			totalHours = 0;
 		}
+		toast.success(`Added Concentration 2: ${concentration2Details.name}`);
 	};
 
 	const moveAhead = (type) => {

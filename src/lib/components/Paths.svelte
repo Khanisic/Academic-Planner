@@ -294,6 +294,7 @@
 		a.click();
 		window.URL.revokeObjectURL(url);
 		document.body.removeChild(a);
+		toast.success(`Course plan downloaded successfully`);
 	}
 </script>
 
