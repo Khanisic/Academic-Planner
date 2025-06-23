@@ -31,7 +31,7 @@
 		}
 	}
 
-	const planAI = new GoogleGenerativeAI('AIzaSyAuyg98U40DUxD9nnf3bKRg05JcG9Rq388');
+	const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 	const planModel = planAI.getGenerativeModel({
 		model: 'gemini-1.5-flash',
 		generationConfig: { temperature: 0 }
